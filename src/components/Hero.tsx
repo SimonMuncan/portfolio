@@ -1,113 +1,80 @@
-import { ArrowDown, Linkedin, Mail } from 'lucide-react'
+import { motion, useReducedMotion } from 'framer-motion'
+import { hero } from '../content'
+
+const words = hero.name.split(' ')
 
 export default function Hero() {
+  const reduced = useReducedMotion()
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div
-          className="absolute w-[700px] h-[700px] rounded-full opacity-[0.07] animate-blob-1"
-          style={{
-            background: 'radial-gradient(circle, #6366f1 0%, transparent 70%)',
-            top: '-10%',
-            left: '-15%',
-            filter: 'blur(60px)',
-          }}
-        />
-        <div
-          className="absolute w-[600px] h-[600px] rounded-full opacity-[0.08] animate-blob-2"
-          style={{
-            background: 'radial-gradient(circle, #8b5cf6 0%, transparent 70%)',
-            bottom: '-5%',
-            right: '-10%',
-            filter: 'blur(60px)',
-          }}
-        />
-        <div
-          className="absolute w-[400px] h-[400px] rounded-full opacity-[0.05] animate-blob-3"
-          style={{
-            background: 'radial-gradient(circle, #a78bfa 0%, transparent 70%)',
-            top: '40%',
-            left: '50%',
-            filter: 'blur(80px)',
-          }}
-        />
-        <div
-          className="absolute inset-0 opacity-[0.025]"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px)',
-            backgroundSize: '60px 60px',
-          }}
-        />
-      </div>
-
       <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-        <h1
-          className="text-6xl sm:text-7xl md:text-8xl font-black tracking-tight leading-none mb-5 animate-fade-up"
-          style={{ animationDelay: '0.1s', animationFillMode: 'both' }}
+        <motion.h1
+          className="font-display text-gold tracking-tight leading-none mb-6 text-scrim"
+          style={{ fontSize: 'clamp(3.5rem, 10vw, 8.5rem)' }}
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: reduced ? 0 : 0.04 } },
+          }}
         >
-          <span className="gradient-text">Simon</span>
-          <br />
-          <span className="text-slate-100">Muncan</span>
-        </h1>
+          {words.map((word, wi) => (
+            <span key={wi}>
+              {wi > 0 && ' '}
+              <span className="inline-block whitespace-nowrap">
+                {word.split('').map((char, ci) => (
+                  <motion.span
+                    key={ci}
+                    className="inline-block"
+                    variants={
+                      reduced
+                        ? undefined
+                        : {
+                            hidden: { opacity: 0, y: 24 },
+                            visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+                          }
+                    }
+                  >
+                    {char}
+                  </motion.span>
+                ))}
+              </span>
+            </span>
+          ))}
+        </motion.h1>
 
-        <p
-          className="text-xl sm:text-2xl text-slate-400 font-medium mb-6 animate-fade-up"
-          style={{ animationDelay: '0.25s', animationFillMode: 'both' }}
+        <motion.p
+          className="font-sans text-lg sm:text-xl text-bone mb-12 text-scrim"
+          initial={reduced ? undefined : { opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: reduced ? 0 : 0.9 }}
         >
-          Full-Stack Developer
-          <span className="mx-3 text-indigo-500/60">·</span>
-          AI Engineer
-        </p>
+          {hero.subline}
+        </motion.p>
 
-        <p
-          className="max-w-xl mx-auto text-slate-500 text-base sm:text-lg leading-relaxed mb-12 animate-fade-up"
-          style={{ animationDelay: '0.4s', animationFillMode: 'both' }}
+        <motion.a
+          href="#work"
+          className="inline-flex items-center gap-2 border border-gold text-gold font-sans font-medium px-7 py-3 rounded-full hover:bg-gold hover:text-void transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+          initial={reduced ? undefined : { opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: reduced ? 0 : 1.1 }}
         >
-          3+ years building production-grade web applications across healthcare SaaS,
-          enterprise, and community platforms, with AI integration that actually ships.
-        </p>
-
-        <div
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up"
-          style={{ animationDelay: '0.55s', animationFillMode: 'both' }}
-        >
-          <a href="#projects" className="btn-primary">
-            See my work
-            <ArrowDown size={16} strokeWidth={2.5} />
-          </a>
-          <a
-            href="https://linkedin.com/in/simon-muncan"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-secondary"
-          >
-            <Linkedin size={16} />
-            LinkedIn
-          </a>
-          <a href="mailto:simonmuncan@gmail.com" className="btn-secondary">
-            <Mail size={16} />
-            Email me
-          </a>
-        </div>
-
-        <p
-          className="mt-16 text-xs text-slate-600 tracking-widest uppercase font-medium animate-fade-in"
-          style={{ animationDelay: '0.9s', animationFillMode: 'both' }}
-        >
-          React · Python · FastAPI · .NET · AWS · PostgreSQL · AI/LLMs
-        </p>
+          {hero.cta}
+        </motion.a>
       </div>
 
-      <a
-        href="#about"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-slate-600 hover:text-slate-400 transition-colors animate-fade-in"
-        style={{ animationDelay: '1.2s', animationFillMode: 'both' }}
-        aria-label="Scroll to about"
+      <motion.a
+        href="#work"
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 text-ash hover:text-bone transition-colors text-scrim"
+        aria-label="Scroll to selected work"
+        initial={reduced ? undefined : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: reduced ? 0 : 1.4 }}
       >
-        <span className="text-[10px] tracking-widest uppercase font-medium">Scroll</span>
-        <ArrowDown size={14} className="animate-bounce" />
-      </a>
+        <span className="text-[10px] tracking-[0.3em] uppercase font-sans font-medium">Scroll</span>
+        <span className={`w-px h-10 bg-current ${reduced ? '' : 'animate-pulse'}`} />
+      </motion.a>
     </section>
   )
 }

@@ -1,77 +1,69 @@
 import { Mail, Linkedin, MapPin } from 'lucide-react'
-import { useReveal } from '../hooks/useReveal'
+import { motion } from 'framer-motion'
+import { act4 } from '../content'
 
 export default function Contact() {
-  const ref = useReveal()
+  const { contact } = act4
 
   return (
-    <section id="contact" className="py-28 relative overflow-hidden">
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(ellipse 60% 50% at 50% 80%, rgba(99,102,241,0.07) 0%, transparent 70%)',
-        }}
-        aria-hidden="true"
-      />
+    <section id="contact" className="py-24 relative">
+      <div className="max-w-3xl mx-auto px-6">
+        <motion.p
+          className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-ash mb-4"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.5 }}
+        >
+          {contact.label}
+        </motion.p>
+        <motion.h2
+          className="font-display text-3xl sm:text-4xl text-bone mb-4"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.5, delay: 0.05 }}
+        >
+          {contact.heading}
+        </motion.h2>
+        <motion.p
+          className="font-sans text-ash leading-relaxed mb-10 max-w-lg"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          {contact.body}
+        </motion.p>
 
-      <div className="max-w-3xl mx-auto px-6 text-center relative" ref={ref}>
-        <p className="section-label reveal mb-4">Contact</p>
-        <h2 className="text-4xl sm:text-5xl font-bold text-slate-100 leading-tight mb-6 reveal reveal-delay-1">
-          Let's build something{' '}
-          <span className="gradient-text">together</span>
-        </h2>
-        <p className="text-slate-500 text-lg leading-relaxed mb-14 reveal reveal-delay-2">
-          Open to full-time roles and freelance work. If you're building something real, let's talk.
-        </p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12 reveal reveal-delay-3">
+        <motion.div
+          className="flex flex-col sm:flex-row gap-x-10 gap-y-4"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+        >
           <a
-            href="mailto:simonmuncan@gmail.com"
-            className="glass-card glass-card-hover p-6 flex flex-col items-center gap-3 group"
+            href={`mailto:${contact.email}`}
+            className="inline-flex items-center gap-2 font-sans text-bone hover:text-gold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
           >
-            <div className="w-11 h-11 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center group-hover:bg-indigo-500/15 transition-colors">
-              <Mail size={20} className="text-indigo-400" />
-            </div>
-            <div>
-              <p className="text-xs text-slate-500 mb-0.5">Email</p>
-              <p className="text-sm text-slate-300 font-medium">simonmuncan@gmail.com</p>
-            </div>
+            <Mail size={16} />
+            {contact.email}
           </a>
-
           <a
-            href="https://linkedin.com/in/simon-muncan"
+            href={contact.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="glass-card glass-card-hover p-6 flex flex-col items-center gap-3 group"
+            className="inline-flex items-center gap-2 font-sans text-bone hover:text-gold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
           >
-            <div className="w-11 h-11 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center group-hover:bg-blue-500/15 transition-colors">
-              <Linkedin size={20} className="text-blue-400" />
-            </div>
-            <div>
-              <p className="text-xs text-slate-500 mb-0.5">LinkedIn</p>
-              <p className="text-sm text-slate-300 font-medium">simon-muncan</p>
-            </div>
+            <Linkedin size={16} />
+            LinkedIn
           </a>
-
-          <div className="glass-card p-6 flex flex-col items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
-              <MapPin size={20} className="text-violet-400" />
-            </div>
-            <div>
-              <p className="text-xs text-slate-500 mb-0.5">Location</p>
-              <p className="text-sm text-slate-300 font-medium">Serbia · open to relocation</p>
-            </div>
-          </div>
-        </div>
-
-        <a
-          href="mailto:simonmuncan@gmail.com"
-          className="btn-primary reveal reveal-delay-4 inline-flex"
-        >
-          <Mail size={18} />
-          Send me a message
-        </a>
+          <span className="inline-flex items-center gap-2 font-sans text-ash">
+            <MapPin size={16} />
+            Serbia
+          </span>
+        </motion.div>
       </div>
     </section>
   )
