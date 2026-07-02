@@ -35,6 +35,10 @@ export default function ScrollRig() {
   )
 
   useEffect(() => {
+    // Same immediate sync as SceneCanvas: this component mounts later (it's
+    // inside the lazy-loaded 3D bundle), so re-sync here too in case that
+    // load gap outlasted SceneCanvas's own sync.
+    scrollState.y = window.scrollY
     measureAct4Top()
     const onResize = () => measureAct4Top()
     window.addEventListener('resize', onResize)

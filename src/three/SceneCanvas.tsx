@@ -38,6 +38,11 @@ export default function SceneCanvas() {
 
   useEffect(() => {
     if (!enabled) return
+    // Sync immediately: on reload the browser can restore scroll to any
+    // position before Lenis ever fires a 'scroll' event, so without this
+    // scrollState.y stays stuck at its initial 0 and the fade/camera math
+    // thinks the page is still at the top until the user scrolls once.
+    scrollState.y = window.scrollY
     measureAct4Top()
     const onResize = () => measureAct4Top()
     window.addEventListener('resize', onResize)
