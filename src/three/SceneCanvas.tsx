@@ -53,8 +53,8 @@ export default function SceneCanvas() {
       if (Number.isFinite(scrollState.act4Top)) {
         const fadeEndY = scrollState.act4Top - window.innerHeight * 0.3
         const fadeStartY = scrollState.act4Top - window.innerHeight * 1.1
-        const fade =
-          1 - Math.min(Math.max((scrollState.y - fadeStartY) / Math.max(fadeEndY - fadeStartY, 1), 0), 1)
+        const t = 1 - Math.min(Math.max((scrollState.y - fadeStartY) / Math.max(fadeEndY - fadeStartY, 1), 0), 1)
+        const fade = t * t * (3 - 2 * t) // smoothstep ease so the dive into the orb tapers instead of cutting linearly
         setActFadeOpacity(fade)
       }
       raf = requestAnimationFrame(tick)
@@ -81,21 +81,27 @@ export default function SceneCanvas() {
     )
   }
 
-  const opacity = visible ? actFadeOpacity : 0
+  const hidden = !visible || actFadeOpacity <= 0.01
 
   return (
+    // Outer div: one-shot CSS transition for the initial reveal (visible
+    // flips false -> true, then stays). Inner div: the scroll-tied fade,
+    // already smoothed per-frame above — no CSS transition here, since
+    // retargeting a transition every rAf tick just fights the JS curve.
     <div
       aria-hidden
       className="fixed inset-0 z-0 transition-opacity duration-700"
       style={{
-        opacity,
-        pointerEvents: opacity <= 0.01 ? 'none' : 'auto',
-        visibility: opacity <= 0.01 ? 'hidden' : 'visible',
+        opacity: visible ? 1 : 0,
+        pointerEvents: hidden ? 'none' : 'auto',
+        visibility: hidden ? 'hidden' : 'visible',
       }}
     >
-      <Suspense fallback={null}>
-        <Scene onReady={() => setVisible(true)} />
-      </Suspense>
+      <div className="w-full h-full" style={{ opacity: actFadeOpacity }}>
+        <Suspense fallback={null}>
+          <Scene onReady={() => setVisible(true)} />
+        </Suspense>
+      </div>
     </div>
   )
 }

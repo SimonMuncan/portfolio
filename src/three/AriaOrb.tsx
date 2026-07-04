@@ -51,7 +51,10 @@ export default function AriaOrb({ position = [0, 0, 0] }: Props) {
     <group ref={group} position={position}>
       <mesh>
         <sphereGeometry args={[2.1, 48, 48]} />
-        <meshBasicMaterial color="#0a0a18" />
+        {/* Matches the page/canvas background (#05050e) exactly, so the final
+            approach — where the orb's surface fills the whole frame — dissolves
+            into Act 4's flat background with no visible seam. */}
+        <meshBasicMaterial color="#05050e" />
       </mesh>
 
       <mesh scale={1.04}>

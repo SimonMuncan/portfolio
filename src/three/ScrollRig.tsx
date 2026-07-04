@@ -16,7 +16,11 @@ export default function ScrollRig() {
   const camera = useThree((s) => s.camera)
   const smoothed = useRef(0)
 
-  // Camera travel path: a gentle S-curve through the field, ending framed on the orb at z=-46.
+  // Camera travel path: a gentle S-curve through the field, closing in on the
+  // orb (center z=-46, radius 2.1) until its surface fills the frame edge to
+  // edge — the last stretch reads as flying *into* the orb rather than just
+  // arriving at a framed shot of it, so the fade into Act 4 (see SceneCanvas)
+  // dissolves from "swallowed by the orb" instead of from a small distant one.
   const path = useMemo(
     () =>
       new THREE.CatmullRomCurve3(
@@ -25,7 +29,8 @@ export default function ScrollRig() {
           new THREE.Vector3(1.6, 0.4, -4),
           new THREE.Vector3(-1.8, -0.5, -18),
           new THREE.Vector3(0.8, 0.3, -30),
-          new THREE.Vector3(0, 0, -39.5), // final: orb (z=-46) fills the frame
+          new THREE.Vector3(0.2, 0.1, -37),
+          new THREE.Vector3(0, 0, -43.6), // final: just outside the orb's surface, frame fully filled
         ],
         false,
         'catmullrom',
