@@ -103,9 +103,8 @@ export const act4 = {
     label: 'Co-founder',
     heading: 'Solenne',
     body: 'Automated website generation for small businesses. From lead to live site, without the owner touching a line of code.',
-    quote:
+    statement:
       "Most small businesses don't have a bad website. They have no website. That gap is the whole company.",
-    cite: 'Simon Muncan',
     href: 'https://solenne.it.com',
   },
   contact: {

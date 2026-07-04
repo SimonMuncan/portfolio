@@ -1,7 +1,6 @@
 import { act4 } from '../content'
 
 // SolenneSection — Act 4 founder block. Flat, editorial, one gold accent.
-// The single quote on the entire site lives here. Do not duplicate the pattern for ARIA.
 
 export default function SolenneSection() {
   const { solenne } = act4
@@ -12,12 +11,9 @@ export default function SolenneSection() {
       <h2 className="mb-4 font-display text-4xl text-bone">{solenne.heading}</h2>
       <p className="mb-10 max-w-xl font-sans leading-relaxed text-ash">{solenne.body}</p>
 
-      <blockquote className="mb-10 border-l-[3px] border-gold pl-6">
-        <p className="font-display text-2xl italic leading-snug text-bone md:text-3xl">
-          &ldquo;{solenne.quote}&rdquo;
-        </p>
-        <cite className="mt-4 block font-sans text-sm not-italic text-ash">- {solenne.cite}</cite>
-      </blockquote>
+      <p className="mb-10 max-w-xl border-l-[3px] border-gold pl-6 font-display text-2xl leading-snug text-bone md:text-3xl">
+        {solenne.statement}
+      </p>
 
       <a
         href={solenne.href}
