@@ -18,6 +18,14 @@ export default function Footer() {
           >
             LinkedIn
           </a>
+          <a
+            href="https://github.com/SimonMuncan"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-gold transition-colors"
+          >
+            GitHub
+          </a>
         </div>
       </div>
     </footer>

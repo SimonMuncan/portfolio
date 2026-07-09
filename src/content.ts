@@ -113,5 +113,6 @@ export const act4 = {
     body: "Open to full-time roles and freelance work. If you're building something real, let's talk.",
     email: 'simonmuncan@gmail.com',
     linkedin: 'https://www.linkedin.com/in/simon-muncan-3067071b0/',
+    github: 'https://github.com/SimonMuncan',
   },
 }

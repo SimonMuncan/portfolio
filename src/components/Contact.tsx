@@ -1,4 +1,4 @@
-import { Mail, Linkedin, MapPin } from 'lucide-react'
+import { Mail, Linkedin, Github, MapPin } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { act4 } from '../content'
 
@@ -58,6 +58,15 @@ export default function Contact() {
           >
             <Linkedin size={16} />
             LinkedIn
+          </a>
+          <a
+            href={contact.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 font-sans text-bone hover:text-gold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+          >
+            <Github size={16} />
+            GitHub
           </a>
           <span className="inline-flex items-center gap-2 font-sans text-ash">
             <MapPin size={16} />
