@@ -2,9 +2,9 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { act3 } from '../content'
 
-export default function AriaShowcase() {
+export default function SitheaShowcase() {
   return (
-    <section id="aria" className="relative min-h-[150vh] flex flex-col justify-center py-28">
+    <section id="sithea" className="relative min-h-[150vh] flex flex-col justify-center py-28">
       <div className="max-w-4xl mx-auto px-6 text-center mb-16">
         <div className="inline-block rounded-3xl bg-void/50 backdrop-blur-md px-6 py-8 sm:px-10">
           <motion.h2

@@ -3,14 +3,14 @@ import SceneCanvas from './three/SceneCanvas'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import Projects from './components/Projects'
-import AriaShowcase from './components/AriaShowcase'
+import SitheaShowcase from './components/SitheaShowcase'
 import Act4About from './components/Act4About'
 import Act4Toolkit from './components/Act4Toolkit'
 import Act4Experience from './components/Act4Experience'
 import SolenneSection from './components/SolenneSection'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
-import ARIACaseStudy from './components/ARIACaseStudy'
+import SitheaCaseStudy from './components/SitheaCaseStudy'
 
 function HomePage() {
   return (
@@ -20,7 +20,7 @@ function HomePage() {
       <main className="relative z-10">
         <Hero />
         <Projects />
-        <AriaShowcase />
+        <SitheaShowcase />
         <Act4About />
         <Act4Toolkit />
         <Act4Experience />
@@ -36,7 +36,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/aria" element={<ARIACaseStudy />} />
+      <Route path="/sithea" element={<SitheaCaseStudy />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )

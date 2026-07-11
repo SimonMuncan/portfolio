@@ -2,7 +2,7 @@
 
 export const hero = {
   name: 'Simon Muncan',
-  subline: 'Full-stack engineer. Founder. Building ARIA.',
+  subline: 'Full-stack engineer. Founder. Building Sithea.',
   cta: 'See the work',
 }
 
@@ -46,7 +46,7 @@ export const act2 = {
 }
 
 export const act3 = {
-  eyebrow: 'ARIA: Private AI health companion',
+  eyebrow: 'Sithea: Private AI health companion',
   description:
     'A multi-tenant platform helping people with rheumatoid arthritis track symptoms, spot flare patterns, and correlate them with weather and habits. Health data stays private and owned by the user.',
   cards: [
@@ -65,7 +65,7 @@ export const act3 = {
   ],
   cta: {
     label: 'Read the full case study',
-    href: '/aria',
+    href: '/sithea',
   },
 }
 

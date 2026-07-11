@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
-// AriaOrb — ARIA's identity mark, arriving in Act 3. A solid near-black core
+// SitheaOrb — Sithea's identity mark, arriving in Act 3. A solid near-black core
 // (so the orb reads as an object, not a light leak) plus a slightly larger
 // fresnel-rim shell: the glow is entirely a view-dependent fresnel term,
 // additively blended. No postprocessing/bloom — matches the brief's hard
@@ -38,7 +38,7 @@ const FRAG = /* glsl */ `
 
 type Props = { position?: [number, number, number] }
 
-export default function AriaOrb({ position = [0, 0, 0] }: Props) {
+export default function SitheaOrb({ position = [0, 0, 0] }: Props) {
   const group = useRef<THREE.Group>(null!)
   const rim = useRef<THREE.ShaderMaterial>(null!)
 

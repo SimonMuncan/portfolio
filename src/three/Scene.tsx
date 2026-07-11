@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { PerformanceMonitor } from '@react-three/drei'
 import ParticleField from './ParticleField'
-import AriaOrb from './AriaOrb'
+import SitheaOrb from './SitheaOrb'
 import ScrollRig from './ScrollRig'
 
 // Scene — everything inside the WebGL context.
@@ -26,7 +26,7 @@ export default function Scene({ onReady }: Props) {
       <color attach="background" args={['#05050E']} />
       <PerformanceMonitor onDecline={() => setCount((c) => Math.max(8_000, Math.floor(c * 0.5)))}>
         <ParticleField count={count} />
-        <AriaOrb position={[0, 0, -46]} />
+        <SitheaOrb position={[0, 0, -46]} />
         <ScrollRig />
       </PerformanceMonitor>
     </Canvas>

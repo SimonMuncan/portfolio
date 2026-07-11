@@ -14,7 +14,7 @@ const stack = {
 const decisions = [
   {
     title: 'Memory lives in the database, not the model',
-    body: 'Rather than relying on the LLM\'s context window, ARIA rebuilds each conversation\'s context from the database on every call, across a layered memory model: working, daily, recent, and long-term. The model never has to remember anything - the system does. This makes memory durable, inspectable, and completely portable across AI providers.',
+    body: 'Rather than relying on the LLM\'s context window, Sithea rebuilds each conversation\'s context from the database on every call, across a layered memory model: working, daily, recent, and long-term. The model never has to remember anything - the system does. This makes memory durable, inspectable, and completely portable across AI providers.',
   },
   {
     title: 'A provider abstraction layer keeps the AI swappable',
@@ -138,7 +138,7 @@ function CaseStudyNav() {
   )
 }
 
-export default function ARIACaseStudy() {
+export default function SitheaCaseStudy() {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
@@ -163,7 +163,7 @@ export default function ARIACaseStudy() {
             </div>
 
             <h1 className="font-display text-5xl sm:text-7xl mb-4">
-              <span className="gradient-text">ARIA</span>
+              <span className="gradient-text">Sithea</span>
             </h1>
             <p className="text-xl sm:text-2xl text-bone/90 font-light mb-8 leading-relaxed">
               A private AI companion for living with a chronic condition.
@@ -193,7 +193,7 @@ export default function ARIACaseStudy() {
             <div className="md:col-span-2 glass-card p-8">
               <p className="section-label mb-4">Overview</p>
               <p className="text-bone/90 leading-relaxed mb-4">
-                ARIA is a personal AI health companion I am building end to end as a solo developer. It started as a single-user prototype and is now being re-architected into a multi-tenant product - the transition that turns a working demo into a real, scalable application.
+                Sithea is a personal AI health companion I am building end to end as a solo developer. It started as a single-user prototype and is now being re-architected into a multi-tenant product - the transition that turns a working demo into a real, scalable application.
               </p>
               <p className="text-ash leading-relaxed">
                 I own every layer: the React Native mobile frontend, the FastAPI backend, the PostgreSQL data model, the GCP infrastructure, the CI/CD pipeline, and the entire visual design system. This project is where I pushed hardest on the parts of engineering that do not show up in tutorials - multi-tenancy, data isolation, infrastructure as code, and designing for a swappable AI layer.
@@ -221,7 +221,7 @@ export default function ARIACaseStudy() {
             <div className="glass-card p-8">
               <p className="section-label mb-4">The Challenge</p>
               <p className="text-bone/90 leading-relaxed mb-4">
-                Most AI assistants are stateless and generic. They forget you between sessions and treat every user identically. ARIA's premise is the opposite: an assistant that genuinely learns an individual over time, while keeping that deeply personal data private and under the user's control.
+                Most AI assistants are stateless and generic. They forget you between sessions and treat every user identically. Sithea's premise is the opposite: an assistant that genuinely learns an individual over time, while keeping that deeply personal data private and under the user's control.
               </p>
               <p className="text-ash leading-relaxed">
                 That premise creates the hard engineering problems I wanted to solve. How do you give an AI durable, personal memory without the model itself remembering anything? How do you isolate sensitive data in a multi-tenant system so one user can never reach another's? How do you avoid locking the whole product to a single AI vendor? And how do you take something built for one person and make it safely serve thousands?
@@ -259,11 +259,11 @@ export default function ARIACaseStudy() {
           <div className="max-w-4xl mx-auto px-6">
             <div className="glass-card p-8">
               <p className="section-label mb-4">Design System</p>
-              <h3 className="font-display text-lg text-bone mb-4">ARIA Cosmic Edition</h3>
+              <h3 className="font-display text-lg text-bone mb-4">Sithea Cosmic Edition</h3>
               <div className="md:grid md:grid-cols-2 gap-8">
                 <div>
                   <p className="text-bone/90 leading-relaxed mb-4">
-                    I built ARIA's design system from scratch. A calm, trustworthy dark aesthetic in deep near-black, nebula purple, and cosmic cyan - with an animated orb as the assistant's identity, a custom starfield, and a consistent glass-card component language.
+                    I built Sithea's design system from scratch. A calm, trustworthy dark aesthetic in deep near-black, nebula purple, and cosmic cyan - with an animated orb as the assistant's identity, a custom starfield, and a consistent glass-card component language.
                   </p>
                   <p className="text-ash leading-relaxed">
                     For a health app the design has a job beyond looking good: it has to feel private and trustworthy in the first few seconds, or people will not enter sensitive data.
@@ -350,7 +350,7 @@ export default function ARIACaseStudy() {
                 <div>
                   <p className="section-label mb-3">Status &amp; What's Next</p>
                   <p className="text-bone/90 leading-relaxed mb-3">
-                    ARIA is in active development. The foundation, design system, and core architecture are in place. The focus now is completing the multi-tenant transition and the predictive features that make the assistant genuinely useful over time.
+                    Sithea is in active development. The foundation, design system, and core architecture are in place. The focus now is completing the multi-tenant transition and the predictive features that make the assistant genuinely useful over time.
                   </p>
                   <p className="text-ash text-sm leading-relaxed">
                     This is a real, in-progress product - not a finished commercial release. I am documenting the build as I go.
