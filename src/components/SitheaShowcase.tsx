@@ -45,7 +45,7 @@ export default function SitheaShowcase() {
       </div>
 
       <motion.div
-        className="text-center"
+        className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-center"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: '-80px' }}
@@ -58,6 +58,17 @@ export default function SitheaShowcase() {
           {act3.cta.label}
           <span aria-hidden>→</span>
         </Link>
+        <a
+          href={act3.website}
+          rel="me noopener"
+          target="_blank"
+          className="group inline-flex items-center gap-2 font-sans text-sm text-bone hover:text-cosmic transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold text-scrim"
+        >
+          sithea.com
+          <span aria-hidden className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+            &#8599;
+          </span>
+        </a>
       </motion.div>
     </section>
   )

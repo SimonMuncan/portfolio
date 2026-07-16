@@ -356,7 +356,16 @@ export default function SitheaCaseStudy() {
                     This is a real, in-progress product - not a finished commercial release. I am documenting the build as I go.
                   </p>
                 </div>
-                <div className="mt-6 md:mt-0 flex-shrink-0">
+                <div className="mt-6 md:mt-0 flex-shrink-0 flex flex-wrap gap-3">
+                  <a
+                    href="https://sithea.com"
+                    target="_blank"
+                    rel="me noopener"
+                    className="inline-flex items-center gap-2 whitespace-nowrap border border-white/15 text-bone px-5 py-2.5 rounded-full hover:border-cosmic hover:text-cosmic transition-colors duration-300"
+                  >
+                    <ExternalLink size={14} />
+                    Visit sithea.com
+                  </a>
                   <a
                     href="mailto:simonmuncan@gmail.com"
                     className="inline-flex items-center gap-2 whitespace-nowrap border border-gold text-gold px-5 py-2.5 rounded-full hover:bg-gold hover:text-void transition-colors duration-300"

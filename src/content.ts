@@ -67,6 +67,7 @@ export const act3 = {
     label: 'Read the full case study',
     href: '/sithea',
   },
+  website: 'https://sithea.com',
 }
 
 export const act4 = {
