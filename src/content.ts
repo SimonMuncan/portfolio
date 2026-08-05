@@ -60,7 +60,7 @@ export const act3 = {
     },
     {
       title: 'Stack',
-      body: 'React Native (Expo) · FastAPI · PostgreSQL + TimescaleDB + pgvector · GCP Cloud Run · Firebase Auth.',
+      body: 'React Native (Expo) · FastAPI · PostgreSQL + TimescaleDB + pgvector · GCP Cloud Run + Terraform · Firebase Auth.',
     },
   ],
   cta: {
@@ -75,7 +75,7 @@ export const act4 = {
     label: 'About',
     heading: 'Building software that actually ships',
     bio: [
-      "I'm a Full-Stack Engineer and AI practitioner based in Serbia. Over the past 3+ years I've owned features end-to-end across healthcare SaaS, enterprise project management, and community platforms, from database schema to deployed production feature.",
+      "I'm a full-stack, AI and cloud engineer based in Serbia. Over the past 3+ years I've owned features end-to-end across healthcare SaaS, enterprise project management, and community platforms, from database schema to Terraform-managed production deploy.",
       'I led a frontend architecture refactor that cut our codebase by 25% and accelerated new feature delivery by 30%. I build JSON-driven systems that eliminate per-feature changes across the whole stack. I integrate AI where it genuinely helps, not as a gimmick.',
     ],
     stats: [

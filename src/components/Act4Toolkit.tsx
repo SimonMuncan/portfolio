@@ -43,7 +43,20 @@ const skillGroups: SkillGroup[] = [
   {
     category: 'Cloud & DevOps',
     Icon: Cloud,
-    items: ['AWS S3', 'AWS RDS', 'AWS Lambda', 'AWS ECS', 'Google Cloud Run', 'GitHub Actions', 'Docker', 'Firebase'],
+    items: [
+      'Terraform',
+      'Google Cloud Run',
+      'Cloud SQL',
+      'Cloud Build',
+      'Secret Manager',
+      'AWS S3',
+      'AWS RDS',
+      'AWS Lambda',
+      'AWS ECS',
+      'GitHub Actions',
+      'Docker',
+      'Firebase',
+    ],
   },
   {
     category: 'Databases',
