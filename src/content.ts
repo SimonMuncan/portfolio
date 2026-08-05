@@ -2,7 +2,7 @@
 
 export const hero = {
   name: 'Simon Muncan',
-  subline: 'Full-stack engineer. Founder. Building Sithea.',
+  subline: 'Full-stack engineer. AI engineer. Cloud engineer.',
   cta: 'See the work',
 }
 
