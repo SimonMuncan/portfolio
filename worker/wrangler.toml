@@ -1,0 +1,23 @@
+name = "portfolio-chat"
+main = "src/index.ts"
+compatibility_date = "2026-08-01"
+
+# Atomic daily token counter. SQLite-backed is the only Durable Object storage
+# on the free plan, and it's what makes the budget check race-free — Workers KV
+# is eventually consistent and has no transactions.
+[[durable_objects.bindings]]
+name = "BUDGET"
+class_name = "Budget"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Budget"]
+
+[vars]
+# Comma-separated. The Worker echoes an Access-Control-Allow-Origin header only
+# for origins in this list.
+ALLOWED_ORIGINS = "https://simonmuncan.tech,https://www.simonmuncan.tech,https://portfolio-500115.web.app,http://localhost:5173"
+
+# Secrets — set with `npx wrangler secret put <NAME>`, never in this file:
+#   GEMINI_API_KEY     from aistudio.google.com/apikey
+#   TURNSTILE_SECRET   from the Cloudflare Turnstile dashboard

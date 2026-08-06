@@ -11,6 +11,7 @@ import SolenneSection from './components/SolenneSection'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import SitheaCaseStudy from './components/SitheaCaseStudy'
+import ChatWidget from './components/ChatWidget'
 
 function HomePage() {
   return (
@@ -34,10 +35,13 @@ function HomePage() {
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/sithea" element={<SitheaCaseStudy />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/sithea" element={<SitheaCaseStudy />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+      <ChatWidget />
+    </>
   )
 }
