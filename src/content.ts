@@ -60,7 +60,7 @@ export const act3 = {
     },
     {
       title: 'Stack',
-      body: 'React Native (Expo) · FastAPI · PostgreSQL + TimescaleDB + pgvector · GCP Cloud Run + Terraform · Firebase Auth.',
+      body: 'React Native (Expo) · FastAPI · PostgreSQL + TimescaleDB + pgvector · Docker Compose on a hardened GCP VM + Terraform · Firebase Auth.',
     },
   ],
   cta: {

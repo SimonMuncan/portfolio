@@ -7,7 +7,7 @@ const stack = {
   Frontend: ['React Native', 'Expo SDK 54', 'Expo Router', 'NativeWind'],
   Backend: ['Python', 'FastAPI', 'SQLAlchemy (async)', 'Pydantic'],
   Data: ['PostgreSQL 16', 'pgvector', 'Time-series extensions'],
-  Infrastructure: ['GCP Cloud Run', 'Cloud SQL', 'Secret Manager', 'Cloud Build', 'Terraform'],
+  Infrastructure: ['GCP Compute Engine', 'Docker Compose', 'Caddy', 'Secret Manager', 'Terraform'],
   AI: ['Gemini Flash 2.0', 'Provider abstraction layer'],
   Auth: ['Firebase Auth'],
 }
@@ -27,15 +27,15 @@ const decisions = [
   },
   {
     title: 'Single-tenant to multi-tenant, done deliberately',
-    body: 'Moving from one hardcoded user to true multi-tenancy meant rethinking data isolation, authentication, per-tenant configuration, and cost-safe autoscaling. This was the highest-leverage architectural work in the project and the part I learned the most from.',
+    body: 'Moving from one hardcoded user to true multi-tenancy meant rethinking data isolation, authentication, per-tenant configuration, and cost-safe scaling. This was the highest-leverage architectural work in the project and the part I learned the most from.',
   },
   {
     title: 'Infrastructure as code from the start',
     body: 'The entire stack is defined in Terraform with separate dev, staging, and production environments, so the infrastructure is reproducible, reviewable, and version-controlled rather than clicked together by hand.',
   },
   {
-    title: 'Serverless and cost-aware backend',
-    body: 'The backend runs on GCP Cloud Run: containerised, request-based autoscaling, scale-to-zero when idle, with a separate worker service for scheduled background jobs. I also built a full cost model across user-scale tiers to keep the unit economics viable as it grows.',
+    title: 'One hardened VM, running exactly what local dev runs',
+    body: 'Production is the same docker-compose stack I run on my own machine - TimescaleDB and pgvector intact - on a single free-tier VM fronted by Caddy, which provisions and renews its own Let\'s Encrypt certificates. Dev/prod parity is the point: what I test is what ships. For something holding health data the posture is deliberate - no public SSH (IAP tunnel only), Shielded VM, a dedicated VPC with a two-rule firewall, a least-privilege service account, secrets only in Secret Manager and never in Terraform state, daily snapshots, and a budget alert. I also built a full cost model across user-scale tiers to keep the unit economics viable as it grows.',
   },
 ]
 
@@ -171,7 +171,7 @@ export default function SitheaCaseStudy() {
             </p>
 
             <div className="flex flex-wrap gap-2 mb-10">
-              {['React Native (Expo)', 'FastAPI', 'PostgreSQL', 'GCP Cloud Run', 'Terraform', 'Gemini'].map((tech) => (
+              {['React Native (Expo)', 'FastAPI', 'PostgreSQL', 'GCP', 'Terraform', 'Gemini'].map((tech) => (
                 <span
                   key={tech}
                   className="text-xs font-medium px-3 py-1 rounded-full border bg-nebula/10 text-nebula/80 border-nebula/20"

@@ -45,10 +45,13 @@ const skillGroups: SkillGroup[] = [
     Icon: Cloud,
     items: [
       'Terraform',
+      'GCP Compute Engine',
       'Google Cloud Run',
       'Cloud SQL',
       'Cloud Build',
       'Secret Manager',
+      'Caddy',
+      'Docker Compose',
       'AWS S3',
       'AWS RDS',
       'AWS Lambda',

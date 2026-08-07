@@ -126,9 +126,12 @@ Boundary
   and a full custom design system.
 - Roles covered: frontend, backend, database design, cloud infrastructure, DevOps, UI/UX.
 - Stack: React Native with Expo SDK 54, Expo Router, NativeWind · FastAPI, async SQLAlchemy,
-  Pydantic · PostgreSQL 16 with pgvector and time-series extensions · GCP Cloud Run,
-  Cloud SQL, Secret Manager, Cloud Build, Terraform · Gemini behind a provider abstraction
-  layer · Firebase Auth.
+  Pydantic · PostgreSQL 16 with pgvector and time-series extensions · a single free-tier GCP
+  VM running the same docker-compose stack as local dev, behind Caddy, with Secret Manager
+  and Terraform · Gemini behind a provider abstraction layer · Firebase Auth.
+- Sithea used to run on Cloud Run and does not any more. Cloud Run stays in his toolkit as
+  something he has worked with — but never describe Sithea as running on it, and never
+  mention Cloud SQL in connection with it.
 
 The premise, in his framing
 - Most AI assistants are stateless and generic: they forget you between sessions and treat
@@ -155,15 +158,21 @@ Engineering decisions, as published in the case study
   with a two-role Postgres setup. No ads near health data, by design.
 - Single-tenant to multi-tenant, done deliberately. Going from one hardcoded user to true
   multi-tenancy meant rethinking data isolation, authentication, per-tenant configuration,
-  and cost-safe autoscaling. He calls this the highest-leverage architectural work in the
+  and cost-safe scaling. He calls this the highest-leverage architectural work in the
   project and the part he learned the most from.
 - Infrastructure as code from the start. The whole stack is defined in Terraform with
   separate dev, staging, and production environments — reproducible and reviewable rather
   than clicked together by hand.
-- Serverless and cost-aware backend. GCP Cloud Run: containerised, request-based
-  autoscaling, scale-to-zero when idle, with a separate worker service for scheduled
-  background jobs. He also built a cost model across user-scale tiers to keep the unit
-  economics viable as it grows.
+- One VM, running exactly what local dev runs. Production is the same docker-compose stack
+  he runs on his own machine — TimescaleDB and pgvector intact — on a single free-tier GCP
+  VM, fronted by Caddy, which provisions and renews its own Let's Encrypt certificates.
+  Dev/prod parity is the point: what he tests is what ships.
+- The security posture on that VM, worth naming in full when someone asks how he treats
+  health data: no public SSH (IAP tunnel only), Shielded VM, a dedicated VPC with a two-rule
+  firewall, a least-privilege service account, secrets only in Secret Manager and never in
+  Terraform state, daily snapshots, and a budget alert.
+- He also built a cost model across user-scale tiers to keep the unit economics viable as
+  it grows.
 - Design system built from scratch: deep near-black, nebula purple, cosmic cyan, soft white,
   an animated orb as the assistant's identity, a custom starfield, a consistent glass-card
   component language. His reasoning: for a health app the design has to feel private and
@@ -299,7 +308,8 @@ making conversation rather than screening.
   Uvicorn, APScheduler
 - AI / ML: Gemini, OpenAI API, Anthropic Claude API, Hugging Face Transformers,
   LLM integration, provider abstraction, grounded retrieval with pgvector
-- Cloud & DevOps: Terraform, Google Cloud Run, Cloud SQL, Cloud Build, Secret Manager,
+- Cloud & DevOps: Terraform, GCP Compute Engine, Google Cloud Run, Cloud SQL, Cloud Build,
+  Secret Manager, Caddy, Docker Compose, VPC and firewall design, IAP, Shielded VM,
   Firebase (Hosting, Functions, Firestore, Auth), Cloudflare Workers, AWS S3, AWS RDS,
   AWS Lambda, AWS ECS, GitHub Actions, Docker, pre-commit, pytest
 - Databases: PostgreSQL, MySQL, MongoDB, SQLite, pgvector, TimescaleDB, Firestore
