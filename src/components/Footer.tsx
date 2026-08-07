@@ -1,3 +1,5 @@
+import EmailLink from './EmailLink'
+
 export default function Footer() {
   const year = new Date().getFullYear()
 
@@ -7,9 +9,9 @@ export default function Footer() {
         <p>© {year} Simon Muncan</p>
         <p>Built with React + Vite · Hosted on Firebase</p>
         <div className="flex items-center gap-4">
-          <a href="mailto:simonmuncan@gmail.com" className="hover:text-gold transition-colors">
+          <EmailLink className="hover:text-gold transition-colors" copiedLabel="Copied">
             Email
-          </a>
+          </EmailLink>
           <a
             href="https://www.linkedin.com/in/simon-muncan-3067071b0/"
             target="_blank"

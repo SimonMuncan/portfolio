@@ -16,7 +16,15 @@ const DAILY_TOKEN_BUDGET = 300_000
 
 // Claimed up front, reconciled against real usage once the reply lands. Sized
 // as a generous upper bound for one exchange: full history in, capped reply out.
-const RESERVED_TOKENS = 3_000
+// The dossier is ~6k tokens of that on its own and rides on every request, so
+// this tracks the size of knowledge.ts — under-reserving would let a burst of
+// concurrent requests each pass the cap check and collectively overshoot it.
+// Reservations are refunded as each reply settles, so this only ever stacks
+// across genuinely in-flight requests.
+// ~6k dossier + 20 history messages capped at 800 chars each + a 600-token
+// reply lands near 10.7k, so this keeps a little headroom above the real worst
+// case rather than sitting on it.
+const RESERVED_TOKENS = 13_000
 
 const RATE_LIMIT_MAX = 12 // messages per IP...
 const RATE_LIMIT_WINDOW_MS = 5 * 60 * 1000 // ...per 5 minutes

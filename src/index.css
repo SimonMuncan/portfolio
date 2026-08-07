@@ -7,9 +7,12 @@
     box-sizing: border-box;
   }
 
-  html {
-    scroll-behavior: smooth;
-  }
+  /* No `scroll-behavior: smooth` here, deliberately. Lenis owns smoothing (see
+     three/ScrollRig.tsx) and drives window.scrollTo every rAF frame; the CSS
+     rule re-smooths each of those, and anchor clicks end up animated twice.
+     Lenis handles in-page anchors itself via its `anchors` option. Where Lenis
+     never mounts — reduced motion, or no WebGL2 — anchors jump instantly, which
+     is the correct outcome for the reduced-motion case anyway. */
 
   body {
     background-color: #05050e;

@@ -12,7 +12,11 @@ const MODEL = 'gemini-3.1-flash-lite'
 const MAX_OUTPUT_TOKENS = 600
 
 const MAX_MESSAGE_CHARS = 800 // one user message
-const MAX_HISTORY = 12 // messages kept from the client's transcript
+// Messages kept from the client's transcript. The prompt's strongest rule is
+// "never send the same answer twice", and it enforces that by seeing what it
+// already said — so this is the real ceiling on that behaviour, not a detail.
+// 20 messages is 10 exchanges; below that it starts repeating itself legally.
+const MAX_HISTORY = 20
 
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:streamGenerateContent?alt=sse`
 const TURNSTILE_VERIFY = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
@@ -138,9 +142,18 @@ export default {
         systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
         generationConfig: {
           maxOutputTokens: MAX_OUTPUT_TOKENS,
-          temperature: 0.4,
-          // Looking up a fact in the dossier needs no reasoning, and thinking
-          // tokens bill at the output rate.
+          // Deliberately not low. The dossier is a pile of facts rather than
+          // prewritten answers, so the model has to choose between them — and
+          // at 0.4 it made the same choice every time, which is what made two
+          // different questions about the same job come back word for word.
+          // Past ~0.8 the grounding starts to soften, and a fabricated fact
+          // costs more here than a repeated one.
+          temperature: 0.7,
+          topP: 0.95,
+          // Selecting the right facts is light work, and thinking tokens bill
+          // at the output rate. If answers still read as recitation, 'LOW' is
+          // the dial — verify the model accepts it before shipping, since an
+          // unsupported level is a 400 and takes the whole chat down.
           thinkingConfig: { thinkingLevel: 'MINIMAL' },
         },
       }),

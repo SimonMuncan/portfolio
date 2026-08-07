@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUp, MessageSquare, X } from 'lucide-react'
 import { act4 } from '../content'
+import EmailLink from './EmailLink'
 import { getTurnstileToken } from '../lib/turnstile'
 
 // The chat Worker's URL. Cross-origin, so the Worker echoes CORS headers for
@@ -16,11 +17,38 @@ interface Message {
 const OPENER =
   "I'm Simon's portfolio assistant. Ask me about his stack, his projects, or his experience."
 
-const SUGGESTIONS = [
+// Drawn from rather than shown whole. Three fixed prompts sent most visitors
+// down the same three answers, which made the assistant look like it only knew
+// three things. Rotating the openers spreads the first question across the
+// dossier instead.
+const SUGGESTION_POOL = [
   'What has he built with .NET?',
   'Walk me through Sithea.',
   'How much cloud experience does he have?',
+  'What is he working on right now?',
+  'Show me his strongest backend work.',
+  'Has he shipped anything solo, end to end?',
+  'How does he handle non-technical stakeholders?',
+  'Is he worth interviewing for a senior role?',
+  'Why did he build a health app?',
+  'How does this chat widget actually work?',
 ]
+
+const SUGGESTION_COUNT = 3
+
+// How close to the bottom still counts as "following along". Wide enough to
+// absorb sub-pixel rounding and the caret's own height.
+const PIN_THRESHOLD_PX = 48
+
+/** Fisher-Yates over a copy, so the pool itself is never reordered. */
+function pickSuggestions(): string[] {
+  const pool = [...SUGGESTION_POOL]
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[pool[i], pool[j]] = [pool[j], pool[i]]
+  }
+  return pool.slice(0, SUGGESTION_COUNT)
+}
 
 /**
  * The assistant is definitively out — failed attestation, or the daily budget
@@ -89,17 +117,41 @@ export default function ChatWidget() {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [unavailable, setUnavailable] = useState(false)
+  // Chosen once per mount: they must not reshuffle under the visitor's cursor
+  // on every re-render.
+  const [suggestions] = useState(pickSuggestions)
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const abortRef = useRef<AbortController | null>(null)
 
+  // Whether the visitor is still reading the bottom of the log. Streaming a
+  // reply must not drag them back down mid-sentence if they scrolled up.
+  const pinnedRef = useRef(true)
+
+  function onLogScroll() {
+    const el = scrollRef.current
+    if (!el) return
+    pinnedRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < PIN_THRESHOLD_PX
+  }
+
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
+    const el = scrollRef.current
+    if (!el || !pinnedRef.current) return
+    // Instant while a reply streams. `messages` changes on every token, and a
+    // smooth scroll re-issued that often restarts its animation before it can
+    // land — which is what made the log lurch instead of following the text.
+    el.scrollTo({ top: el.scrollHeight, behavior: busy ? 'auto' : 'smooth' })
   }, [messages, busy])
 
   useEffect(() => {
-    if (open) inputRef.current?.focus()
+    if (!open) return
+    inputRef.current?.focus()
+    // The log unmounts with the panel, so a reopened chat would otherwise start
+    // at scrollTop 0 — showing the opener with the conversation below the fold.
+    // Jump, don't animate: this is a restore, not a new message arriving.
+    const el = scrollRef.current
+    if (el) el.scrollTop = el.scrollHeight
   }, [open])
 
   useEffect(() => {
@@ -116,6 +168,10 @@ export default function ChatWidget() {
   async function send(text: string) {
     const question = text.trim()
     if (!question || busy) return
+
+    // Sending is an explicit request to see what comes back, so re-follow the
+    // log even if they had scrolled up to re-read something.
+    pinnedRef.current = true
 
     const next: Message[] = [...messages, { role: 'user', content: question }]
     setMessages([...next, { role: 'assistant', content: '' }])
@@ -184,12 +240,21 @@ export default function ChatWidget() {
               </button>
             </header>
 
-            <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+            <div
+              ref={scrollRef}
+              onScroll={onLogScroll}
+              // Lenis listens for wheel events across the whole document, so
+              // without this the wheel over the panel scrolls the page behind
+              // it and the log itself barely moves. `overscroll-contain` stops
+              // the same thing happening once the log hits its own end.
+              data-lenis-prevent
+              className="flex-1 overflow-y-auto overscroll-contain px-4 py-4 space-y-4"
+            >
               <p className="font-sans text-sm text-ash leading-relaxed">{OPENER}</p>
 
               {empty && !unavailable && (
                 <div className="flex flex-col items-start gap-2 pt-1">
-                  {SUGGESTIONS.map((s) => (
+                  {suggestions.map((s) => (
                     <button
                       key={s}
                       onClick={() => send(s)}
@@ -222,12 +287,9 @@ export default function ChatWidget() {
 
               {!empty && !busy && !unavailable && (
                 <div className="flex flex-wrap gap-2 pt-1">
-                  <a
-                    href={`mailto:${act4.contact.email}`}
-                    className="font-sans text-xs text-cosmic/90 hover:text-cosmic border border-cosmic/25 hover:border-cosmic/50 rounded-full px-3 py-1.5 transition-colors"
-                  >
+                  <EmailLink className="font-sans text-xs text-cosmic/90 hover:text-cosmic border border-cosmic/25 hover:border-cosmic/50 rounded-full px-3 py-1.5 transition-colors">
                     Email Simon
-                  </a>
+                  </EmailLink>
                   <a
                     href="/sithea"
                     className="font-sans text-xs text-ash hover:text-bone border border-white/10 hover:border-white/25 rounded-full px-3 py-1.5 transition-colors"
@@ -247,12 +309,9 @@ export default function ChatWidget() {
                   Simon answers his own email faster than any bot does anyway.
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <a
-                    href={`mailto:${act4.contact.email}`}
-                    className="font-sans text-xs text-cosmic/90 hover:text-cosmic border border-cosmic/25 hover:border-cosmic/50 rounded-full px-3 py-1.5 transition-colors"
-                  >
+                  <EmailLink className="font-sans text-xs text-cosmic/90 hover:text-cosmic border border-cosmic/25 hover:border-cosmic/50 rounded-full px-3 py-1.5 transition-colors">
                     Email Simon
-                  </a>
+                  </EmailLink>
                   <a
                     href={act4.contact.linkedin}
                     target="_blank"

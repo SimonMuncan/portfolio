@@ -49,7 +49,11 @@ export default function ScrollRig() {
     window.addEventListener('resize', onResize)
     const settleTimer = setTimeout(measureAct4Top, 600) // catch late webfont/layout shifts
 
-    const lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 0.9 })
+    // `anchors` replaces the CSS `scroll-behavior: smooth` that used to fight
+    // this instance — in-page links (#work) now animate once, through Lenis.
+    // Bare `href="#"` has an empty hash, which Lenis skips, so the Navbar logo
+    // keeps its native behaviour.
+    const lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 0.9, anchors: true })
     const onScroll = ({ scroll }: { scroll: number }) => {
       scrollState.y = scroll
     }

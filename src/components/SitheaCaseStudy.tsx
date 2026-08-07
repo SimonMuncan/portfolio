@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, Zap, ExternalLink } from 'lucide-react'
+import EmailLink from './EmailLink'
 
 const stack = {
   Frontend: ['React Native', 'Expo SDK 54', 'Expo Router', 'NativeWind'],
@@ -127,12 +128,9 @@ function CaseStudyNav() {
           <ArrowLeft size={15} className="group-hover:-translate-x-0.5 transition-transform duration-200" />
           Simon Muncan
         </Link>
-        <a
-          href="mailto:simonmuncan@gmail.com"
-          className="text-sm border border-gold text-gold px-4 py-1.5 rounded-full hover:bg-gold hover:text-void transition-colors duration-300"
-        >
+        <EmailLink className="text-sm border border-gold text-gold px-4 py-1.5 rounded-full hover:bg-gold hover:text-void transition-colors duration-300">
           Hire me
-        </a>
+        </EmailLink>
       </nav>
     </header>
   )
@@ -366,13 +364,10 @@ export default function SitheaCaseStudy() {
                     <ExternalLink size={14} />
                     Visit sithea.com
                   </a>
-                  <a
-                    href="mailto:simonmuncan@gmail.com"
-                    className="inline-flex items-center gap-2 whitespace-nowrap border border-gold text-gold px-5 py-2.5 rounded-full hover:bg-gold hover:text-void transition-colors duration-300"
-                  >
+                  <EmailLink className="inline-flex items-center gap-2 whitespace-nowrap border border-gold text-gold px-5 py-2.5 rounded-full hover:bg-gold hover:text-void transition-colors duration-300">
                     <ExternalLink size={14} />
                     Get in touch
-                  </a>
+                  </EmailLink>
                 </div>
               </div>
             </div>

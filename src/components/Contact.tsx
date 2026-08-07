@@ -1,6 +1,7 @@
 import { Mail, Linkedin, Github, MapPin } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { act4 } from '../content'
+import EmailLink from './EmailLink'
 
 export default function Contact() {
   const { contact } = act4
@@ -43,13 +44,13 @@ export default function Contact() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.5, delay: 0.15 }}
         >
-          <a
-            href={`mailto:${contact.email}`}
+          <EmailLink
             className="inline-flex items-center gap-2 font-sans text-bone hover:text-gold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+            copiedLabel="Copied to clipboard"
           >
             <Mail size={16} />
             {contact.email}
-          </a>
+          </EmailLink>
           <a
             href={contact.linkedin}
             target="_blank"

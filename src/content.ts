@@ -29,7 +29,7 @@ export const act2 = {
     {
       title: 'Automated Backup Platform',
       company: 'Personal Project',
-      period: '2025',
+      period: '2026',
       description:
         'Weekly automated backup tool with a React dashboard for run history and storage trends, plus an HTML email digest after every run.',
       stack: ['Python', 'Google Drive API', 'React', 'Firebase'],
@@ -94,10 +94,13 @@ export const act4 = {
   },
   experience: {
     label: 'Experience',
+    // Reverse-chronological by start date. Freelance sits last because it
+    // started earliest, and runs underneath everything above it.
     items: [
       { role: 'Software Engineer', org: 'VegaIT', period: 'May 2025 - Present' },
       { role: 'Project Management Dashboard', org: 'EPAM Systems', period: 'Nov 2024 - Apr 2025' },
       { role: 'AI Desktop Assistant', org: 'Schneider Electric Hub', period: 'Oct - Nov 2023' },
+      { role: 'Full-Stack Engineer', org: 'Freelance', period: '2022 - Present' },
     ],
   },
   solenne: {

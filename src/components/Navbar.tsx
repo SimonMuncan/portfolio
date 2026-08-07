@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import EmailLink from './EmailLink'
 
 const links = [
   { label: 'Work', href: '#work' },
@@ -40,12 +41,9 @@ export default function Navbar() {
             </li>
           ))}
           <li>
-            <a
-              href="mailto:simonmuncan@gmail.com"
-              className="font-sans text-sm border border-gold text-gold px-4 py-1.5 rounded-full hover:bg-gold hover:text-void transition-colors duration-300"
-            >
+            <EmailLink className="font-sans text-sm border border-gold text-gold px-4 py-1.5 rounded-full hover:bg-gold hover:text-void transition-colors duration-300">
               Hire me
-            </a>
+            </EmailLink>
           </li>
         </ul>
 
@@ -78,12 +76,15 @@ export default function Navbar() {
             </li>
           ))}
           <li>
-            <a
-              href="mailto:simonmuncan@gmail.com"
+            <EmailLink
+              // Delayed rather than immediate, unlike the nav links above:
+              // closing the menu at once hides the "Email copied" confirmation,
+              // which is the only feedback a phone with no mail app gets.
+              onClick={() => window.setTimeout(() => setMenuOpen(false), 1400)}
               className="inline-flex justify-center font-sans text-sm border border-gold text-gold px-4 py-1.5 rounded-full w-full"
             >
               Hire me
-            </a>
+            </EmailLink>
           </li>
         </ul>
       </div>
