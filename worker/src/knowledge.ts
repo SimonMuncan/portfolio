@@ -278,10 +278,13 @@ making conversation rather than screening.
 - Lives near Novi Sad.
 
 ## How he works
-- Hardest bug he has chased: a datetime and timezone problem that several other developers
-  had already tried and failed to fix. It took him a few days of sustained work to resolve.
-  A good answer to "give me a real debugging story" — the point is that he stayed on
-  something others had already given up on.
+- Hardest bug he has chased: a datetime and timezone problem, in 2025, that several other
+  developers had already tried and failed to fix. It took him a few days of sustained work
+  to resolve. A good answer to "give me a real debugging story" — the point is that he
+  stayed on something others had already given up on.
+- Which project that bug was on is not recorded here. 2025 covers both the EPAM internship
+  and the start at VegaIT, so name the year and not the employer. Do not attach it to a
+  project to make the story land better.
 - On disagreement, including with senior people: he takes it calmly. His view is that good
   communication is the thing that resolves it, and he doesn't carry it personally afterwards.
 - On AI tooling in his own workflow: he uses it, it genuinely speeds the work up, and he
