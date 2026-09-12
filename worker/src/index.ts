@@ -18,6 +18,11 @@ const MAX_MESSAGE_CHARS = 800 // one user message
 // 20 messages is 10 exchanges; below that it starts repeating itself legally.
 const MAX_HISTORY = 20
 
+// The body is read before Turnstile runs, so an unverified caller must not be
+// able to make the Worker buffer and parse something huge. 20 messages of
+// multi-byte text fit well inside this; the widget only ever sends the last 20.
+const MAX_BODY_BYTES = 256_000
+
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:streamGenerateContent?alt=sse`
 const TURNSTILE_VERIFY = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
 
@@ -33,9 +38,13 @@ interface ChatTurn {
   parts: [{ text: string }]
 }
 
-function corsHeaders(origin: string | null, env: Env): Record<string, string> {
+function isAllowedOrigin(origin: string | null, env: Env): origin is string {
   const allowed = env.ALLOWED_ORIGINS.split(',').map((o) => o.trim())
-  if (!origin || !allowed.includes(origin)) return {}
+  return !!origin && allowed.includes(origin)
+}
+
+function corsHeaders(origin: string | null, env: Env): Record<string, string> {
+  if (!isAllowedOrigin(origin, env)) return {}
   return {
     'Access-Control-Allow-Origin': origin,
     'Access-Control-Allow-Headers': 'Content-Type',
@@ -90,9 +99,25 @@ export default {
     if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors })
     if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405, cors)
 
+    // CORS only stops a foreign page reading the reply — the request itself
+    // still runs. Browsers always send Origin on a fetch POST, so a missing or
+    // unlisted one is another site or a script, and it is turned away before it
+    // costs a Turnstile call or any parsing.
+    if (!isAllowedOrigin(origin, env)) return json({ error: 'Forbidden' }, 403, cors)
+
+    // Content-Length is a cheap early out, but a chunked body has none, so the
+    // size is checked again once the bytes are actually in hand.
+    if (Number(req.headers.get('Content-Length')) > MAX_BODY_BYTES) {
+      return json({ error: 'Request too large' }, 413, cors)
+    }
+
     let payload: { messages?: unknown; turnstileToken?: unknown }
     try {
-      payload = await req.json()
+      const body = await req.arrayBuffer()
+      if (body.byteLength > MAX_BODY_BYTES) {
+        return json({ error: 'Request too large' }, 413, cors)
+      }
+      payload = JSON.parse(new TextDecoder().decode(body)) ?? {}
     } catch {
       return json({ error: 'Invalid request' }, 400, cors)
     }
@@ -134,9 +159,10 @@ export default {
           )
     }
 
-    const upstream = await fetch(`${GEMINI_URL}&key=${env.GEMINI_API_KEY}`, {
+    // Key in a header, not the query string: URLs end up in logs and traces.
+    const upstream = await fetch(GEMINI_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': env.GEMINI_API_KEY },
       body: JSON.stringify({
         contents,
         systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
