@@ -31,3 +31,5 @@ ui-debug.log
 # Cloudflare Workers
 .wrangler/
 worker/tmp/
+# wrangler's local secrets file — holds real GEMINI_API_KEY / TURNSTILE_SECRET
+.dev.vars*
