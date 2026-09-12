@@ -36,6 +36,9 @@ const SUGGESTION_POOL = [
 
 const SUGGESTION_COUNT = 3
 
+// Mirrors the Worker's own MAX_HISTORY — it ignores anything older.
+const MAX_HISTORY = 20
+
 // How close to the bottom still counts as "following along". Wide enough to
 // absorb sub-pixel rounding and the caret's own height.
 const PIN_THRESHOLD_PX = 48
@@ -73,7 +76,9 @@ async function streamReply(
   const res = await fetch(CHAT_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages, turnstileToken }),
+    // The Worker reads only the last MAX_HISTORY messages and refuses oversized
+    // bodies, so a long conversation must not grow the request without bound.
+    body: JSON.stringify({ messages: messages.slice(-MAX_HISTORY), turnstileToken }),
     signal,
   })
 
