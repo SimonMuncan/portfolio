@@ -4,6 +4,8 @@ import { ArrowUp, MessageSquare, X } from 'lucide-react'
 import { act4 } from '../content'
 import EmailLink from './EmailLink'
 import { getTurnstileToken } from '../lib/turnstile'
+import { OPEN_CHAT_EVENT } from '../lib/chat'
+import type { OpenChatDetail } from '../lib/chat'
 
 // The chat Worker's URL. Cross-origin, so the Worker echoes CORS headers for
 // origins on its allow-list.
@@ -35,6 +37,28 @@ const SUGGESTION_POOL = [
 ]
 
 const SUGGESTION_COUNT = 3
+
+// Most visitors never notice a launcher in the corner, so once per session a
+// short nudge says what it is for. Shown after they have had time to look at
+// the hero, never while the panel is open, and gone for good once dismissed.
+const NUDGE_DELAY_MS = 7000
+const NUDGE_KEY = 'chat-nudge-seen'
+
+function nudgeSeen(): boolean {
+  try {
+    return sessionStorage.getItem(NUDGE_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+
+function markNudgeSeen() {
+  try {
+    sessionStorage.setItem(NUDGE_KEY, '1')
+  } catch {
+    // Storage blocked: the nudge may show again next load, which is harmless.
+  }
+}
 
 // Mirrors the Worker's own MAX_HISTORY — it ignores anything older.
 const MAX_HISTORY = 20
@@ -125,6 +149,7 @@ export default function ChatWidget() {
   // Chosen once per mount: they must not reshuffle under the visitor's cursor
   // on every re-render.
   const [suggestions] = useState(pickSuggestions)
+  const [nudge, setNudge] = useState(false)
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -167,12 +192,45 @@ export default function ChatWidget() {
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
+  useEffect(() => {
+    if (nudgeSeen()) return
+    const timer = window.setTimeout(() => setNudge(true), NUDGE_DELAY_MS)
+    return () => window.clearTimeout(timer)
+  }, [])
+
+  // Opening the chat by any route counts as having seen the nudge.
+  useEffect(() => {
+    if (!open) return
+    setNudge(false)
+    markNudgeSeen()
+  }, [open])
+
+  function dismissNudge() {
+    setNudge(false)
+    markNudgeSeen()
+  }
+
+  // Sections open the chat through openChat(), sometimes with a question. The
+  // listener is registered once, so it reaches send() through a ref rather
+  // than capturing the first render's closure over an empty transcript.
+  const sendRef = useRef<(text: string) => void>(() => {})
+
+  useEffect(() => {
+    const onOpen = (e: Event) => {
+      setOpen(true)
+      const question = (e as CustomEvent<OpenChatDetail>).detail?.question
+      if (question) sendRef.current(question)
+    }
+    window.addEventListener(OPEN_CHAT_EVENT, onOpen)
+    return () => window.removeEventListener(OPEN_CHAT_EVENT, onOpen)
+  }, [])
+
   // Drop any in-flight request if the widget unmounts.
   useEffect(() => () => abortRef.current?.abort(), [])
 
   async function send(text: string) {
     const question = text.trim()
-    if (!question || busy) return
+    if (!question || busy || unavailable) return
 
     // Sending is an explicit request to see what comes back, so re-follow the
     // log even if they had scrolled up to re-read something.
@@ -215,6 +273,8 @@ export default function ChatWidget() {
     }
   }
 
+  sendRef.current = send
+
   const empty = messages.length === 0
 
   return (
@@ -225,21 +285,21 @@ export default function ChatWidget() {
             key="panel"
             role="dialog"
             aria-label="Ask about Simon's work"
-            className="fixed bottom-24 right-4 sm:right-6 z-50 w-[min(24rem,calc(100vw-2rem))] h-[min(32rem,calc(100vh-8rem))] flex flex-col rounded-2xl border border-white/10 bg-void/95 backdrop-blur-xl shadow-2xl shadow-black/60 overflow-hidden"
+            className="fixed bottom-24 right-4 sm:right-6 z-50 w-[min(24rem,calc(100vw-2rem))] h-[min(32rem,calc(100vh-8rem))] flex flex-col rounded-xl border border-ink/10 bg-surface shadow-2xl shadow-black/15 overflow-hidden"
             initial={{ opacity: 0, y: 16, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.97 }}
             transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
           >
-            <header className="flex items-center justify-between px-4 py-3 border-b border-white/10">
+            <header className="flex items-center justify-between px-4 py-3 border-b border-ink/10">
               <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-cosmic" aria-hidden="true" />
-                <h2 className="font-sans text-sm font-semibold text-bone">Ask about my work</h2>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden="true" />
+                <h2 className="font-sans text-sm font-semibold text-ink">Ask about my work</h2>
               </div>
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Close chat"
-                className="text-ash hover:text-bone transition-colors"
+                className="grid h-8 w-8 place-items-center rounded-md text-muted hover:text-ink transition-colors"
               >
                 <X size={16} />
               </button>
@@ -248,14 +308,10 @@ export default function ChatWidget() {
             <div
               ref={scrollRef}
               onScroll={onLogScroll}
-              // Lenis listens for wheel events across the whole document, so
-              // without this the wheel over the panel scrolls the page behind
-              // it and the log itself barely moves. `overscroll-contain` stops
-              // the same thing happening once the log hits its own end.
-              data-lenis-prevent
+              // Keeps the wheel from scrolling the page once the log hits its end.
               className="flex-1 overflow-y-auto overscroll-contain px-4 py-4 space-y-4"
             >
-              <p className="font-sans text-sm text-ash leading-relaxed">{OPENER}</p>
+              <p className="font-sans text-sm text-muted leading-relaxed">{OPENER}</p>
 
               {empty && !unavailable && (
                 <div className="flex flex-col items-start gap-2 pt-1">
@@ -263,7 +319,7 @@ export default function ChatWidget() {
                     <button
                       key={s}
                       onClick={() => send(s)}
-                      className="font-sans text-xs text-left text-cosmic/90 hover:text-cosmic border border-cosmic/25 hover:border-cosmic/50 rounded-full px-3 py-1.5 transition-colors"
+                      className="font-sans text-sm text-left text-ink border border-ink/15 hover:border-ink/40 rounded-md px-3 py-2 transition-colors"
                     >
                       {s}
                     </button>
@@ -276,28 +332,28 @@ export default function ChatWidget() {
                   <p
                     className={
                       m.role === 'user'
-                        ? 'font-sans text-sm text-bone bg-white/[0.07] rounded-2xl rounded-br-sm px-3.5 py-2 max-w-[85%] whitespace-pre-wrap'
-                        : 'font-sans text-sm text-bone leading-relaxed whitespace-pre-wrap'
+                        ? 'font-sans text-sm text-paper bg-ink rounded-lg rounded-br-sm px-3.5 py-2 max-w-[85%] whitespace-pre-wrap'
+                        : 'font-sans text-sm text-ink leading-relaxed whitespace-pre-wrap'
                     }
                   >
                     {m.content}
                     {m.role === 'assistant' && !m.content && busy && (
-                      <span className="inline-block w-1.5 h-3.5 bg-cosmic/70 animate-pulse align-middle" />
+                      <span className="inline-block w-1.5 h-3.5 bg-ink/50 animate-pulse align-middle" />
                     )}
                   </p>
                 </div>
               ))}
 
-              {error && <p className="font-sans text-sm text-gold">{error}</p>}
+              {error && <p className="font-sans text-sm text-red-600">{error}</p>}
 
               {!empty && !busy && !unavailable && (
                 <div className="flex flex-wrap gap-2 pt-1">
-                  <EmailLink className="font-sans text-xs text-cosmic/90 hover:text-cosmic border border-cosmic/25 hover:border-cosmic/50 rounded-full px-3 py-1.5 transition-colors">
+                  <EmailLink className="font-sans text-xs font-medium text-paper bg-ink hover:bg-ink/85 rounded-md px-3 py-1.5 transition-colors">
                     Email Simon
                   </EmailLink>
                   <a
                     href="/sithea"
-                    className="font-sans text-xs text-ash hover:text-bone border border-white/10 hover:border-white/25 rounded-full px-3 py-1.5 transition-colors"
+                    className="font-sans text-xs font-medium text-ink border border-ink/15 hover:border-ink/40 rounded-md px-3 py-1.5 transition-colors"
                   >
                     Read the case study
                   </a>
@@ -306,22 +362,22 @@ export default function ChatWidget() {
             </div>
 
             {unavailable ? (
-              <div className="px-4 py-4 border-t border-white/10">
-                <p className="font-sans text-sm text-bone leading-relaxed">
+              <div className="px-4 py-4 border-t border-ink/10">
+                <p className="font-sans text-sm text-ink leading-relaxed">
                   The assistant is offline right now.
                 </p>
-                <p className="font-sans text-xs text-ash leading-relaxed mt-1 mb-3">
+                <p className="font-sans text-xs text-muted leading-relaxed mt-1 mb-3">
                   Simon answers his own email faster than any bot does anyway.
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <EmailLink className="font-sans text-xs text-cosmic/90 hover:text-cosmic border border-cosmic/25 hover:border-cosmic/50 rounded-full px-3 py-1.5 transition-colors">
+                  <EmailLink className="font-sans text-xs font-medium text-paper bg-ink hover:bg-ink/85 rounded-md px-3 py-1.5 transition-colors">
                     Email Simon
                   </EmailLink>
                   <a
                     href={act4.contact.linkedin}
                     target="_blank"
                     rel="noreferrer"
-                    className="font-sans text-xs text-ash hover:text-bone border border-white/10 hover:border-white/25 rounded-full px-3 py-1.5 transition-colors"
+                    className="font-sans text-xs font-medium text-ink border border-ink/15 hover:border-ink/40 rounded-md px-3 py-1.5 transition-colors"
                   >
                     LinkedIn
                   </a>
@@ -333,7 +389,7 @@ export default function ChatWidget() {
                   e.preventDefault()
                   send(input)
                 }}
-                className="flex items-center gap-2 px-3 py-3 border-t border-white/10"
+                className="flex items-center gap-2 px-3 py-3 border-t border-ink/10"
               >
                 <input
                   ref={inputRef}
@@ -342,13 +398,13 @@ export default function ChatWidget() {
                   placeholder="Type a message…"
                   maxLength={800}
                   aria-label="Your question"
-                  className="flex-1 bg-transparent font-sans text-sm text-bone placeholder:text-ash/70 focus:outline-none px-1"
+                  className="flex-1 bg-transparent font-sans text-sm text-ink placeholder:text-muted focus:outline-none px-1"
                 />
                 <button
                   type="submit"
                   disabled={!input.trim() || busy}
                   aria-label="Send message"
-                  className="shrink-0 w-8 h-8 grid place-items-center rounded-full bg-cosmic/15 text-cosmic disabled:opacity-30 disabled:cursor-not-allowed hover:bg-cosmic/25 transition-colors"
+                  className="shrink-0 w-8 h-8 grid place-items-center rounded-md bg-ink text-paper disabled:opacity-30 disabled:cursor-not-allowed hover:bg-ink/85 transition-colors"
                 >
                   <ArrowUp size={15} />
                 </button>
@@ -358,19 +414,53 @@ export default function ChatWidget() {
         )}
       </AnimatePresence>
 
+      <AnimatePresence>
+        {nudge && !open && (
+          <motion.div
+            key="nudge"
+            className="fixed bottom-[5.25rem] right-4 sm:right-6 z-50 w-[min(17rem,calc(100vw-2rem))] rounded-xl rounded-br-sm border border-ink/10 bg-surface shadow-xl shadow-black/15"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              className="block w-full text-left px-4 py-3 pr-9"
+            >
+              <span className="block font-sans text-sm font-medium text-ink mb-0.5">
+                Hiring, or just curious?
+              </span>
+              <span className="block font-sans text-xs text-muted leading-relaxed">
+                Ask my assistant about my experience, stack or projects. It answers from my real work history.
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={dismissNudge}
+              aria-label="Dismiss"
+              className="absolute top-1.5 right-1.5 grid h-8 w-8 place-items-center rounded-md text-muted hover:text-ink transition-colors"
+            >
+              <X size={14} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <button
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? 'Close chat' : 'Ask about my work'}
         aria-expanded={open}
-        className="fixed bottom-6 right-4 sm:right-6 z-50 flex items-center gap-2 rounded-full border border-white/10 bg-void/90 backdrop-blur-xl pl-4 pr-5 py-3 shadow-xl shadow-black/50 hover:border-cosmic/40 transition-colors"
+        className="fixed bottom-6 right-4 sm:right-6 z-50 flex items-center gap-2 rounded-full bg-ink text-paper pl-4 pr-5 py-3 shadow-lg shadow-black/20 hover:bg-ink/85 transition-colors"
       >
         {open ? (
-          <X size={16} className="text-ash" />
+          <X size={16} />
         ) : (
-          <MessageSquare size={16} className="text-cosmic" />
+          <MessageSquare size={16} />
         )}
-        <span className="font-sans text-sm font-medium text-bone">
-          {open ? 'Close' : 'Ask about my work'}
+        <span className="font-sans text-sm font-medium">
+          {open ? 'Close' : 'Ask my AI about me'}
         </span>
       </button>
     </>

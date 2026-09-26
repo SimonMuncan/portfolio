@@ -1,80 +1,38 @@
-import { Mail, Linkedin, Github, MapPin } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { ArrowUpRight, Github, Linkedin, MapPin } from 'lucide-react'
 import { act4 } from '../content'
 import EmailLink from './EmailLink'
+import Section from './Section'
 
 export default function Contact() {
   const { contact } = act4
 
   return (
-    <section id="contact" className="py-24 relative">
-      <div className="max-w-3xl mx-auto px-6">
-        <motion.p
-          className="font-sans text-xs font-semibold tracking-[0.2em] uppercase text-ash mb-4"
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.5 }}
-        >
-          {contact.label}
-        </motion.p>
-        <motion.h2
-          className="font-display text-3xl sm:text-4xl text-bone mb-4"
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.5, delay: 0.05 }}
-        >
-          {contact.heading}
-        </motion.h2>
-        <motion.p
-          className="font-sans text-ash leading-relaxed mb-10 max-w-lg"
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          {contact.body}
-        </motion.p>
+    <Section id="contact" index="06" label={contact.label}>
+      <h2 className="max-w-2xl text-4xl font-semibold tracking-tight text-ink sm:text-5xl">{contact.heading}</h2>
+      <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted">{contact.body}</p>
 
-        <motion.div
-          className="flex flex-col sm:flex-row gap-x-10 gap-y-4"
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.5, delay: 0.15 }}
-        >
-          <EmailLink
-            className="inline-flex items-center gap-2 font-sans text-bone hover:text-gold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
-            copiedLabel="Copied to clipboard"
-          >
-            <Mail size={16} />
-            {contact.email}
-          </EmailLink>
-          <a
-            href={contact.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 font-sans text-bone hover:text-gold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
-          >
-            <Linkedin size={16} />
-            LinkedIn
-          </a>
-          <a
-            href={contact.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 font-sans text-bone hover:text-gold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
-          >
-            <Github size={16} />
-            GitHub
-          </a>
-          <span className="inline-flex items-center gap-2 font-sans text-ash">
-            <MapPin size={16} />
-            Serbia
-          </span>
-        </motion.div>
+      <EmailLink
+        className="group mt-10 inline-flex items-center gap-2 text-2xl font-medium text-ink underline decoration-ink/20 underline-offset-8 transition-colors hover:text-accent hover:decoration-accent sm:text-3xl"
+        copiedLabel="Copied to clipboard"
+      >
+        {contact.email}
+        <ArrowUpRight size={24} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+      </EmailLink>
+
+      <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3">
+        <a href={contact.linkedin} target="_blank" rel="noopener noreferrer" className="text-link">
+          <Linkedin size={16} />
+          LinkedIn
+        </a>
+        <a href={contact.github} target="_blank" rel="noopener noreferrer" className="text-link">
+          <Github size={16} />
+          GitHub
+        </a>
+        <span className="inline-flex items-center gap-1 text-sm text-muted">
+          <MapPin size={16} />
+          Serbia · open to relocation
+        </span>
       </div>
-    </section>
+    </Section>
   )
 }

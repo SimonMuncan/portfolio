@@ -1,13 +1,11 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import SceneCanvas from './three/SceneCanvas'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import Projects from './components/Projects'
-import SitheaShowcase from './components/SitheaShowcase'
-import Act4About from './components/Act4About'
-import Act4Toolkit from './components/Act4Toolkit'
 import Act4Experience from './components/Act4Experience'
-import SolenneSection from './components/SolenneSection'
+import Building from './components/Building'
+import Act4Toolkit from './components/Act4Toolkit'
+import Act4About from './components/Act4About'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import SitheaCaseStudy from './components/SitheaCaseStudy'
@@ -15,17 +13,15 @@ import ChatWidget from './components/ChatWidget'
 
 function HomePage() {
   return (
-    <div className="min-h-screen bg-void text-bone font-sans">
-      <SceneCanvas />
+    <div className="min-h-screen">
       <Navbar />
-      <main className="relative z-10">
+      <main>
         <Hero />
         <Projects />
-        <SitheaShowcase />
-        <Act4About />
-        <Act4Toolkit />
         <Act4Experience />
-        <SolenneSection />
+        <Building />
+        <Act4Toolkit />
+        <Act4About />
         <Contact />
       </main>
       <Footer />
