@@ -3,124 +3,69 @@
 @tailwind utilities;
 
 @layer base {
-  * {
-    box-sizing: border-box;
+  :root {
+    --paper: 248 247 244;
+    --surface: 255 255 255;
+    --ink: 20 20 19;
+    --muted: 92 92 88;
+    --accent: 29 78 216;
+    color-scheme: light;
   }
 
-  /* No `scroll-behavior: smooth` here, deliberately. Lenis owns smoothing (see
-     three/ScrollRig.tsx) and drives window.scrollTo every rAF frame; the CSS
-     rule re-smooths each of those, and anchor clicks end up animated twice.
-     Lenis handles in-page anchors itself via its `anchors` option. Where Lenis
-     never mounts — reduced motion, or no WebGL2 — anchors jump instantly, which
-     is the correct outcome for the reduced-motion case anyway. */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: 16 16 15;
+      --surface: 26 26 24;
+      --ink: 236 236 232;
+      --muted: 160 160 154;
+      --accent: 122 162 247;
+      color-scheme: dark;
+    }
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Anchor jumps land below the sticky nav instead of under it. */
+    scroll-padding-top: 5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
 
   body {
-    background-color: #05050e;
-    color: #ededf2;
-    font-family: 'DM Sans', system-ui, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
-  }
-
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 9998;
-    opacity: 0.028;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-size: 200px 200px;
+    @apply bg-paper text-ink font-sans antialiased;
+    font-feature-settings: 'ss01';
   }
 
   ::selection {
-    background: rgba(124, 58, 237, 0.35);
-    color: #ededf2;
+    background: rgb(var(--accent) / 0.2);
   }
 
-  ::-webkit-scrollbar {
-    width: 5px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: #05050e;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #1e1e3a;
-    border-radius: 3px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: #7c3aed;
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent));
+    outline-offset: 3px;
+    border-radius: 4px;
   }
 }
 
 @layer components {
-  .glass-card {
-    background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
+  /* Small quiet label: section indices, field names, metadata. */
+  .eyebrow {
+    @apply text-sm font-medium text-muted;
   }
 
-  .glass-card-hover {
-    transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  .btn-primary {
+    @apply inline-flex items-center gap-2 rounded-md bg-ink px-5 py-2.5 text-sm font-medium text-paper transition-colors hover:bg-ink/85;
   }
 
-  .glass-card-hover:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(124, 58, 237, 0.3);
-    transform: translateY(-4px);
-    box-shadow: 0 20px 60px rgba(124, 58, 237, 0.12);
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 rounded-md border border-ink/15 px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:border-ink/40;
   }
 
-  .gradient-border-card {
-    background: linear-gradient(#05050e, #05050e) padding-box,
-                linear-gradient(135deg, #7c3aed, #22d3ee, #7c3aed) border-box;
-    border: 1px solid transparent;
-    border-radius: 16px;
-    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .gradient-border-card:hover {
-    background: linear-gradient(#0a0a18, #0a0a18) padding-box,
-                linear-gradient(135deg, #7c3aed, #22d3ee, #7c3aed) border-box;
-    transform: translateY(-4px);
-    box-shadow: 0 20px 60px rgba(124, 58, 237, 0.18);
-  }
-
-  .gradient-text {
-    background: linear-gradient(135deg, #7c3aed 0%, #22d3ee 50%, #7c3aed 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .section-label {
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #22d3ee;
-  }
-}
-
-@layer utilities {
-  .text-scrim {
-    text-shadow: 0 2px 20px rgba(5, 5, 14, 0.9), 0 1px 4px rgba(5, 5, 14, 0.95);
-  }
-
-  .dot-grid {
-    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.18) 1px, transparent 1px);
-    background-size: 52px 52px;
-  }
-
-  .dot-grid-violet {
-    background-image: radial-gradient(circle, rgba(124, 58, 237, 0.35) 1px, transparent 1px);
-    background-size: 44px 44px;
+  .text-link {
+    @apply inline-flex items-center gap-1 text-sm font-medium text-ink underline decoration-ink/20 underline-offset-4 transition-colors hover:text-accent hover:decoration-accent;
   }
 }

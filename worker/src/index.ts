@@ -159,31 +159,49 @@ export default {
           )
     }
 
+    // A network-level failure (DNS, connection reset) throws rather than
+    // returning a status. Caught here so the reservation is refunded and the
+    // widget still gets a CORS-readable error instead of a bare 500.
+    const refund = () =>
+      budget
+        .fetch('https://budget/settle', {
+          method: 'POST',
+          body: JSON.stringify({ delta: -RESERVED_TOKENS }),
+        })
+        .catch((err) => console.error('budget refund failed', err))
+
     // Key in a header, not the query string: URLs end up in logs and traces.
-    const upstream = await fetch(GEMINI_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': env.GEMINI_API_KEY },
-      body: JSON.stringify({
-        contents,
-        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-        generationConfig: {
-          maxOutputTokens: MAX_OUTPUT_TOKENS,
-          // Deliberately not low. The dossier is a pile of facts rather than
-          // prewritten answers, so the model has to choose between them — and
-          // at 0.4 it made the same choice every time, which is what made two
-          // different questions about the same job come back word for word.
-          // Past ~0.8 the grounding starts to soften, and a fabricated fact
-          // costs more here than a repeated one.
-          temperature: 0.7,
-          topP: 0.95,
-          // Selecting the right facts is light work, and thinking tokens bill
-          // at the output rate. If answers still read as recitation, 'LOW' is
-          // the dial — verify the model accepts it before shipping, since an
-          // unsupported level is a 400 and takes the whole chat down.
-          thinkingConfig: { thinkingLevel: 'MINIMAL' },
-        },
-      }),
-    })
+    let upstream: Response
+    try {
+      upstream = await fetch(GEMINI_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': env.GEMINI_API_KEY },
+        body: JSON.stringify({
+          contents,
+          systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+          generationConfig: {
+            maxOutputTokens: MAX_OUTPUT_TOKENS,
+            // Deliberately not low. The dossier is a pile of facts rather than
+            // prewritten answers, so the model has to choose between them — and
+            // at 0.4 it made the same choice every time, which is what made two
+            // different questions about the same job come back word for word.
+            // Past ~0.8 the grounding starts to soften, and a fabricated fact
+            // costs more here than a repeated one.
+            temperature: 0.7,
+            topP: 0.95,
+            // Selecting the right facts is light work, and thinking tokens bill
+            // at the output rate. If answers still read as recitation, 'LOW' is
+            // the dial — verify the model accepts it before shipping, since an
+            // unsupported level is a 400 and takes the whole chat down.
+            thinkingConfig: { thinkingLevel: 'MINIMAL' },
+          },
+        }),
+      })
+    } catch (err) {
+      console.error('gemini unreachable', err)
+      ctx.waitUntil(refund())
+      return json({ error: 'Something broke on my end. Try again in a moment.' }, 502, cors)
+    }
 
     const { readable, writable } = new TransformStream()
     const writer = writable.getWriter()
