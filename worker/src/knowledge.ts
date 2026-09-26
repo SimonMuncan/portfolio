@@ -15,7 +15,7 @@
 // it something to choose between, which is what makes the answers differ.
 //
 // NOTE ON DEPTH: Sithea and Solenne stay at the level already published on this
-// site. Do not add unpublished implementation detail — the assistant is told to
+// site (Solenne's platform section below is published on the homepage). Do not add unpublished implementation detail — the assistant is told to
 // hand deeper questions to Simon in person.
 
 export const KNOWLEDGE = `
@@ -24,7 +24,12 @@ export const KNOWLEDGE = `
 ## Identity
 - Full-stack engineer, AI engineer, cloud engineer. Based near Novi Sad, Serbia.
 - simonmuncan@gmail.com · github.com/SimonMuncan · linkedin.com/in/simon-muncan-3067071b0/
-- As presented on the site: 3+ years experience, 7+ projects shipped, 6+ companies and clients.
+- As presented on the site: 3+ years experience, 10+ projects shipped, 8+ companies and clients.
+- The 10 projects: Solenne, the AI insurance integration, the clinical trial platform, Sithea,
+  this portfolio's assistant, the EPAM project management API, HNZ, Digital Archive, the
+  backup platform, and the Schneider assistant.
+- The 8 companies and clients: VegaIT, EPAM, Schneider Electric, Solenne, HNZ, the Digital
+  Archive client, and VegaIT's two clients (clinical trial and insurance, both unnamed).
 - The 3+ years counts freelance work from 2022-23 onward, not just employment. He was
   freelancing while still at university.
 - Owns features end to end — database schema through to Terraform-managed production deploy.
@@ -54,11 +59,45 @@ How he got here, in his own account
   repeating per-feature work, and weighing cost against build time before reaching for
   a paid tier. Both have concrete examples below.
 
-## VegaIT — Software Engineer, May 2025 to present (current role)
+## Right now — answer "what is he working on" from this block
+- Day job: Software Engineer at VegaIT, on the AI insurance integration (since September
+  2026) — an integration between an AI insurance platform and two insurance platforms, on
+  .NET and Azure.
+- The clinical trial platform is his previous VegaIT project. It ended in August 2026. Never
+  describe it as what he is working on now; it is past work, even though it is the section
+  with the most detail.
+- Outside work: co-founder and lead engineer of Solenne, and building Sithea solo.
+
+## VegaIT — Software Engineer, May 2025 to present (current employer)
+
+Two client projects so far. He moved from the clinical trial platform to an AI
+insurance integration project in September 2026.
+
+## VegaIT project 2 — AI insurance integration, September 2026 to present (current project)
+- An enterprise integration connecting an AI insurance platform with two other insurance
+  platforms, built around .NET and Azure. Submissions, quotes, binding and renewals flow
+  between all three systems. The client is not named — call it an AI insurance platform.
+- Stack: .NET, C#, Azure, REST APIs, SQL, enterprise integrations.
+- Insurance-domain workflows: submissions, quotes, binding and renewals.
+- Supporting and maintaining the platform: troubleshooting and resolving production issues
+  across backend services, APIs, data flows and external system integrations.
+- Works with Azure services and infrastructure, investigating issues across application,
+  integration and deployment layers.
+- Analyses issues across multiple services and components to find root causes and
+  coordinate fixes.
+- Works with CI/CD, deployment and release procedures, including change requests and
+  production support.
+- Collaborates with senior engineers and client-facing teams to investigate incidents and
+  deliver changes safely in production.
+- He started in September 2026, so it is recent. Say what the work is; don't invent
+  outcomes or metrics for it.
+
+## VegaIT project 1 — Clinical trial planning platform, May 2025 to August 2026
 
 The product
-- A production clinical trial management platform, used by consultants and healthcare teams.
-- Built in two halves: trial planning, and live trials.
+- A production clinical trial planning and recruitment platform, used by sponsors,
+  study managers, and healthcare teams.
+- Built in two halves, shipped as independently toggleable modules: Planning, and Recruitment.
 - Trial planning: selecting the countries and sites for a clinical trial, and simulating
   the cost, timeline, and other parameters before the trial runs.
 - Live trials: giving consultants a view into a running trial's data, with models that
@@ -66,13 +105,35 @@ The product
 - AI in the product does analysis, and generates the KPIs that show how a trial is tracking.
 
 His position in it
-- Stack: .NET on the backend, React with Material UI for the charting layer, plus Python and AWS.
+- Stack: .NET 8 / ASP.NET Core with EF Core on the backend, React and TypeScript with
+  Material UI for the charting layer, PostgreSQL with PostGIS, plus Python and AWS.
 - Team of 10 to 15.
 - Not the team lead, but covered the role when the lead was away.
 - Works directly with the healthcare team rather than through a proxy — requirements
   reach him first-hand.
 
-Three pieces of his own work
+The backend architecture, which is where most of his work sits
+- A .NET 8 modular monolith deployed as a single AWS Lambda behind API Gateway, split into
+  Planning and Recruitment modules that can be switched on and off independently. One
+  deployment unit, with the module boundaries held in code rather than by splitting it into
+  separate services.
+- Relational and geospatial data in AWS RDS — PostgreSQL with PostGIS — so trial sites carry
+  real geography and can be scored and mapped by location. The .NET side works with the
+  spatial types through NetTopologySuite. This is the geospatial site-selection feature.
+- The schema evolved through EF Core migrations, with soft-delete and audit conventions
+  applied as conventions across every entity rather than hand-written per model. Every
+  configuration change is captured in an audit trail, because clinical research has to be
+  traceable for regulators.
+- Authorisation is fine-grained and trial-scoped, enforced on every single endpoint: JWT
+  identity from Cognito, with a Redis-backed permission cache so a permission check isn't a
+  database round trip per request.
+- Competing-trial analysis reads the public ClinicalTrials.gov (AACT) dataset, read-only.
+- Trial documents and generated reports are served through signed S3 URLs, Excel exports are
+  produced on demand, and large data imports run through AWS Glue into Parquet.
+- Structured logging and tracing through CloudWatch and X-Ray.
+- He also reviews code, and works in a Scrum team.
+
+Three pieces of frontend work worth naming
 - JSON-driven dashboards. The dashboards were not generic, so every new KPI cost real
   development time, and it compounded because different trials need different KPIs. He
   rebuilt them to be driven by JSON, so KPIs are constructed generically per trial instead
@@ -84,7 +145,8 @@ Three pieces of his own work
 
 Boundary
 - Some of the underlying trial data is under NDA; some is publicly available data.
-- Architecture and his own work: open. Client name, trial identity, and trial data: not.
+- Architecture and his own work: open — everything described above can be discussed freely.
+- Client name, trial identity, and trial data: not.
 
 ## Freelance and independent work, 2022-23 to present
 - He has freelanced since 2022-23, alongside university and now alongside the VegaIT job.
@@ -187,12 +249,44 @@ Depth boundary
 - The /sithea case study is the right place to send anyone who wants the reasoning in full.
 - Past what the case study covers, Simon walks through it personally.
 
-## Solenne — co-founder
+## Solenne — co-founder and lead engineer, 2026 to present
 - https://solenne.it.com — automated website generation for small businesses.
 - From lead to live site without the owner touching a line of code.
 - The thesis, in his words: most small businesses don't have a bad website, they have no
   website, and that gap is the whole company.
-- Active venture, so build details stay off the record. He is happy to talk about it directly.
+- He co-founded it and is the lead engineer: he architected and built the platform from
+  scratch. The security work below was done jointly.
+- The codebase is confidential. Code walkthroughs are available on request where the NDA
+  allows. Started in 2026.
+
+The platform
+- A production SaaS in a monorepo: one async FastAPI backend with about 100 REST endpoints,
+  two React + TypeScript frontends, containerized background workers, and a shared Python
+  domain library.
+- Stack: Python, FastAPI, PostgreSQL, SQLAlchemy 2.0 (async), Alembic, React, TypeScript,
+  Vite, LLM APIs, AWS (Lambda, ECS Fargate, RDS, S3, CloudFront), Terraform, Docker,
+  GitHub Actions, pytest, Vitest.
+- Layered backend architecture, router → service → model, with typed request and response
+  schemas, RFC 7807 error handling, standard pagination, and role-based access control.
+- PostgreSQL schema modelled and evolved through about 40 versioned Alembic migrations,
+  async SQLAlchemy 2.0 throughout.
+- Event-driven data processing: the API launches one-off containerized jobs on AWS ECS
+  Fargate that ingest, normalize, deduplicate and score records, using a rules engine
+  configured from the database.
+- LLMs in production features behind a provider-agnostic interface, with a fake provider
+  for tests, a shared rate and cost budget, and automatic redaction of personal data before
+  any request is sent. Same instinct as Sithea's provider abstraction layer.
+- Two React + TypeScript apps: an internal dashboard with 11 views, and a public site with
+  server-side prerendering, SEO checks at build time, and localization served at the edge.
+- Multi-currency financial logic: exchange-rate conversion, recurring-revenue (MRR)
+  reporting, and a pluggable payment-provider layer with signature-verified webhooks.
+- Quality in the pipeline: 500+ automated tests (pytest against disposable Postgres
+  containers, plus Vitest), with ruff, mypy and ESLint enforced in GitHub Actions CI.
+  Deploys to AWS use keyless OIDC.
+- Security: he analyzed real malicious traffic against the live platform and helped add
+  CloudFront edge functions and alerting to block and monitor it.
+- This is the answer to "show me his strongest backend work" alongside VegaIT, and to
+  "does he write tests" — it is his largest production Python codebase.
 
 ## Client and freelance work
 
@@ -217,8 +311,9 @@ Automated Backup Platform (2026, TypeScript)
 - Stack: Python, Google Drive API, React, Firebase, Firestore.
 
 This portfolio (2026, TypeScript)
-- React 18, Vite, TypeScript, Tailwind, Three.js via react-three-fiber, Framer Motion,
-  Lenis for scroll. Hosted on Firebase Hosting.
+- React 18, Vite, TypeScript, Tailwind. Hosted on Firebase Hosting.
+- Deliberately plain design: no 3D or scroll effects, so the content carries it. An
+  earlier version had a Three.js scene; he removed it in favour of a cleaner layout.
 
 This chat assistant — how it actually works, if anyone asks
 - A Cloudflare Worker calling Gemini, grounded strictly in a dossier written from this
@@ -257,8 +352,8 @@ real, and the reason the systems thinking isn't academic.
 ORS — current
 - ORS is Serbia's organisation for people with rheumatic and musculoskeletal disease (RMD).
 - He is an active member now, not a past one.
-- He also sits in EULAR PARE, the European network for people with arthritis and rheumatism,
-  on External and Internal Affairs. Also current.
+- He also volunteers with EULAR PARE, the European network for people with arthritis and
+  rheumatism, as a member of its Internal and External Affairs working group. Also current.
 - What the work involves: training people, bringing new technology into how the organisation
   works, and helping older members learn that technology so they can do their own work better.
 - He also coordinates and organises events, including talks by doctors and rheumatologists.
@@ -304,21 +399,33 @@ making conversation rather than screening.
 - Languages: Python, TypeScript, JavaScript, C#, .NET, C, Assembly (8051)
 - Frontend: React, React Native, Next.js, Tailwind CSS, Material UI v7, Zustand,
   TanStack Query, React Hook Form, Zod, shadcn/ui, Vite, Three.js, NativeWind, Expo
-- Backend: FastAPI, .NET Core, Django, SQLAlchemy (async), Pydantic v2, Alembic,
-  Uvicorn, APScheduler
+- Backend: FastAPI, .NET 8 / ASP.NET Core, Entity Framework Core, NetTopologySuite,
+  Django, SQLAlchemy (async), Pydantic v2, Alembic, Uvicorn, APScheduler
 - AI / ML: Gemini, OpenAI API, Anthropic Claude API, Hugging Face Transformers,
   LLM integration, provider abstraction, grounded retrieval with pgvector
 - Cloud & DevOps: Terraform, GCP Compute Engine, Google Cloud Run, Cloud SQL, Cloud Build,
   Secret Manager, Caddy, Docker Compose, VPC and firewall design, IAP, Shielded VM,
   Firebase (Hosting, Functions, Firestore, Auth), Cloudflare Workers, AWS S3, AWS RDS,
-  AWS Lambda, AWS ECS, GitHub Actions, Docker, pre-commit, pytest
-- Databases: PostgreSQL, MySQL, MongoDB, SQLite, pgvector, TimescaleDB, Firestore
-- Integrations: Stripe, Google Drive API, Gmail API (OAuth2), Firebase Auth, Leaflet Maps
+  AWS Lambda, AWS API Gateway, AWS Cognito, AWS Glue, AWS ECS, CloudWatch, AWS X-Ray,
+  GitHub Actions, Docker, pre-commit, pytest
+- Databases: PostgreSQL, PostGIS, MySQL, MongoDB, SQLite, Redis, pgvector, TimescaleDB,
+  Firestore
+- Integrations: Stripe, Google Drive API, Gmail API (OAuth2), Firebase Auth, Leaflet Maps,
+  ClinicalTrials.gov (AACT)
 
 ## Where the strongest evidence lives, by question
 - Architecture, cloud, and AI design → Sithea
 - Production engineering practice, CI/CD, testing → the EPAM FastAPI service
 - Enterprise delivery in a team, and domain depth in clinical trials → VegaIT
+- Backend and API design under real constraints, .NET, or EF Core → the VegaIT backend
+- Geospatial work → PostGIS and NetTopologySuite site selection at VegaIT, the only place
+  he has done it
+- Authorisation, multi-tenancy, and permission models → VegaIT's trial-scoped permissions
+  with a Redis cache, and Sithea's Postgres row-level security — two different answers to
+  the same problem, which is worth saying
+- Building for a regulated domain, audit and traceability → VegaIT's audit trail and the
+  soft-delete and audit conventions across every entity
+- Serverless → the VegaIT modular monolith on a single Lambda, and why it isn't microservices
 - Configuration-driven architecture that removes repeated work → the VegaIT JSON dashboards
 - Working straight with non-engineering stakeholders → VegaIT, where requirements come to
   him directly from the healthcare team
@@ -351,7 +458,8 @@ Not covered anywhere, and not to be guessed at:
   an engineer he is relative to a level. Nobody has appraised him in here, so there is
   nothing to report and nothing to reason out. See "Critical questions".
 - Unpublished implementation detail on Sithea and Solenne.
-- The name of the VegaIT client, the identity of any specific trial, and any trial data.
+- The name of the clinical trial platform's client, the identity of any specific trial, and
+  any trial data. Likewise the name of the insurance platform's client.
   Describe the platform's capabilities and Simon's own work on it — never a named customer
   or study.
 
@@ -425,7 +533,8 @@ brochure with a text box attached.
 - Some entries are deliberately thin: a name, a language, a year. Say exactly that much and
   stop. Do not infer what a project probably did from its name, and do not turn one line
   into a paragraph.
-- Sithea and Solenne are live ventures. Stay at the level the dossier gives you. Deeper
+- Sithea and Solenne are live ventures. Stay at the level the dossier gives you — for
+  Solenne that now includes the platform architecture, which is published. Deeper
   implementation questions go to Simon himself — frame that as a reason to start a
   conversation, not as a refusal.
 - Never state or imply anything under "Off the record".
