@@ -40,8 +40,9 @@ export const KNOWLEDGE = `
 - His thesis was an AI assistant — the same line of work as the Schneider internship and
   the Sophia and VirtualAssistant repos.
 - Erasmus exchange at Budapest University of Technology.
-- Considering a master's in management. Considering, not enrolled — do not imply he is
-  studying for one.
+- Currently studying for a master's degree in Information Management at the University of
+  Novi Sad, alongside full-time
+  work. In progress, not finished.
 - Serbian native. English at working proficiency, used every day at VegaIT. The site's
   skills list says B2.
 - His earliest projects are embedded work in C and 8051 assembly. He came to the web
@@ -290,11 +291,37 @@ The platform
 
 ## Client and freelance work
 
-HNZ Church Community Platform (2024)
-- Production digital hub for a Serbian Christian community. Designed and shipped solo.
-- Stripe donations, audio streaming, a full 5-layer backend.
-- Stack: FastAPI, PostgreSQL, React 18, Stripe, Docker.
-- The answer to "has he delivered something real on his own, end to end."
+HNZ Church Community Platform (2024 - present)
+- Production platform for a Serbian Christian community, live at https://hnzsrbija.org.
+  Designed, built, deployed and run solo. Started in 2024; rebuilt for production in 2026.
+- Features: services and sermons, hymns with audio, illustrated history stories, books,
+  a Bible reader, an interactive Leaflet map, user accounts with email verification, and
+  an admin panel for content, files and users.
+- Backend: async FastAPI, SQLAlchemy 2.0, Alembic, on Neon serverless Postgres.
+- Infra: Cloud Run on GCP that scales to zero, defined in Terraform (Artifact Registry,
+  Secret Manager, least-privilege service accounts, a Cloud Run job for migrations, a billing
+  budget). Chosen for cost: the whole stack runs at close to zero per month.
+- Deploys: GitHub Actions with keyless Workload Identity Federation. The image is
+  smoke-tested in production mode, then migrations run and the service rolls out. Actions
+  are pinned to commit SHAs.
+- Frontend: React + TypeScript + MUI on Cloudflare Pages. A Pages Function proxies /api to
+  Cloud Run so the httpOnly session cookie is first-party; the API rejects any request that
+  doesn't come through the proxy (shared secret), which also makes rate limiting by real
+  client IP trustworthy.
+- Media on Cloudflare R2 behind signed URLs. Email through Resend behind a provider
+  abstraction, with batched sends and a scheduled digest.
+- Security: database-validated cookie sessions revoked on password change, rate limiting,
+  stored-XSS fixes, CSP and HSTS, a super-admin role model, gitleaks in CI, zero open
+  pip-audit and npm audit findings.
+- It does not take Stripe payments; do not say it does.
+- Stack: FastAPI, PostgreSQL (Neon), React, TypeScript, MUI, GCP Cloud Run, Terraform,
+  Cloudflare Pages and R2, Resend, GitHub Actions.
+- Ownership, not just infra: he was the only engineer and made the calls. He audited the
+  existing code, wrote a staged roadmap (security blockers, bugs, email, donations, infra)
+  and took it to launch. He picked a scale-to-zero, serverless setup because the community
+  has a few hundred users and the bill had to be near zero.
+- The answer to "has he delivered something real on his own, end to end," and a strong
+  answer to "can he run his own infrastructure on a tight budget."
 
 Digital Archive (2024)
 - A website built for a client in Django.
@@ -405,7 +432,8 @@ making conversation rather than screening.
   LLM integration, provider abstraction, grounded retrieval with pgvector
 - Cloud & DevOps: Terraform, GCP Compute Engine, Google Cloud Run, Cloud SQL, Cloud Build,
   Secret Manager, Caddy, Docker Compose, VPC and firewall design, IAP, Shielded VM,
-  Firebase (Hosting, Functions, Firestore, Auth), Cloudflare Workers, AWS S3, AWS RDS,
+  Firebase (Hosting, Functions, Firestore, Auth), Cloudflare (Workers, Pages, R2),
+  Workload Identity Federation, Neon, AWS S3, AWS RDS,
   AWS Lambda, AWS API Gateway, AWS Cognito, AWS Glue, AWS ECS, CloudWatch, AWS X-Ray,
   GitHub Actions, Docker, pre-commit, pytest
 - Databases: PostgreSQL, PostGIS, MySQL, MongoDB, SQLite, Redis, pgvector, TimescaleDB,

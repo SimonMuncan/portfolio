@@ -9,7 +9,7 @@ interface SkillGroup {
 // in the chat dossier, where it can be asked about instead of scanned past.
 const skillGroups: SkillGroup[] = [
   { category: 'Primary', items: ['Python', 'FastAPI', '.NET / C#', 'PostgreSQL', 'SQLAlchemy'] },
-  { category: 'Cloud & infra', items: ['AWS (Lambda, ECS Fargate, RDS, S3)', 'Azure', 'GCP', 'Terraform', 'Docker', 'GitHub Actions'] },
+  { category: 'Cloud & infra', items: ['AWS (Lambda, ECS Fargate, RDS, S3)', 'Azure', 'GCP (Cloud Run)', 'Cloudflare (Workers, Pages, R2)', 'Terraform', 'Docker', 'GitHub Actions'] },
   { category: 'Frontend', items: ['React', 'TypeScript', 'Tailwind', 'MUI'] },
   { category: 'Also', items: ['Django', 'Redis', 'PostGIS', 'pgvector', 'LLM APIs (Gemini, Claude, OpenAI)'] },
 ]

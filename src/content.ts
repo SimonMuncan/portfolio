@@ -6,8 +6,8 @@ export const hero = {
   availability: 'Open to full-time roles and freelance work',
   headline: 'I build production backends, APIs and AI products.',
   intro:
-    "Currently at VegaIT on an enterprise integration between an AI insurance platform and two insurance platforms, built on .NET and Azure, after building a clinical trial planning platform on .NET, PostgreSQL and AWS. Outside work I lead engineering at Solenne, a SaaS I co-founded, and I'm building Sithea, a private AI health companion, end to end.",
-  stack: ['Python', 'FastAPI', '.NET', 'PostgreSQL', 'AWS', 'React'],
+    "Currently at VegaIT on an enterprise integration between an AI insurance platform and two insurance platforms, built on .NET and Azure, after building a clinical trial planning platform on .NET, PostgreSQL and AWS. Outside work I lead engineering at Solenne, a SaaS I co-founded, I'm building Sithea, a private AI health companion, end to end, and I'm doing a master's in Information Management.",
+  stack: ['Python', 'FastAPI', '.NET', 'PostgreSQL', 'React', 'AWS', 'GCP', 'Azure'],
   cta: 'See the work',
   askCta: 'Ask my AI assistant',
   now: [
@@ -101,6 +101,23 @@ export const act2 = {
       links: [{ label: 'Ask about this project', ask: 'What did he build on the clinical trial platform at VegaIT?' }],
     },
     {
+      title: 'HNZ Church Community Platform',
+      company: 'Freelance',
+      period: '2024 - Present',
+      summary:
+        'Production platform for a Serbian Christian community, live at hnzsrbija.org. Designed, built and deployed solo, on a scale-to-zero bill.',
+      built: [
+        'Async FastAPI on Neon Postgres: sermons, hymns with audio, history stories, a Bible reader, an interactive map and a full admin panel',
+        'Scale-to-zero Cloud Run API in Terraform, behind a Cloudflare Pages proxy that keeps the session cookie first-party',
+        'Security hardening: database-validated sessions, rate limiting, CSP and HSTS, gitleaks in CI',
+      ],
+      stack: ['FastAPI', 'PostgreSQL', 'React', 'TypeScript', 'GCP Cloud Run', 'Terraform', 'Cloudflare'],
+      links: [
+        { label: 'hnzsrbija.org', href: 'https://hnzsrbija.org' },
+        { label: 'Ask about the infrastructure', ask: 'How is the HNZ platform deployed?' },
+      ],
+    },
+    {
       title: 'Portfolio AI Assistant',
       company: 'Personal Project',
       period: '2026',
@@ -130,19 +147,6 @@ export const act2 = {
       ],
       stack: ['FastAPI', 'PostgreSQL', 'SQLAlchemy', 'Alembic', 'Docker', 'GitHub Actions'],
       links: [{ label: 'GitHub', href: 'https://github.com/SimonMuncan/FastAPI-project' }],
-    },
-    {
-      title: 'HNZ Church Community Platform',
-      company: 'Freelance',
-      period: '2024',
-      summary:
-        'Production digital hub for a Serbian Christian community. Designed and shipped solo, from database to deploy.',
-      built: [
-        'Stripe donations',
-        'Audio streaming for the community',
-        'A five-layer FastAPI backend on PostgreSQL, containerised with Docker',
-      ],
-      stack: ['FastAPI', 'PostgreSQL', 'React 18', 'Stripe', 'Docker'],
     },
     {
       title: 'Automated Backup Platform',
@@ -218,7 +222,7 @@ export const act4 = {
     heading: 'Building software that actually ships',
     bio: [
       "I'm a backend-leaning full-stack engineer based in Serbia. I work on APIs, databases and the cloud infrastructure they run on, and I own features end to end, from database schema to Terraform-managed production deploy.",
-      'I came to software from hardware. My degree is in electrical and computer engineering, and my first projects were written in C and 8051 assembly. That is where the habit comes from of weighing systems, cost and constraints before reaching for another service or a paid tier.',
+      'I came to software from hardware. My degree is in electrical and computer engineering, I\'m now doing a master\'s in Information Management, and my first projects were written in C and 8051 assembly. That is where the habit comes from of weighing systems, cost and constraints before reaching for another service or a paid tier.',
       "Outside engineering I volunteer with ORS, Serbia's organisation for people with rheumatic and musculoskeletal disease, and with EULAR PARE in its Internal and External Affairs working group. That community is who Sithea is for.",
     ],
     stats: [
@@ -229,6 +233,7 @@ export const act4 = {
     facts: [
       ['Location', 'Serbia · open to relocation'],
       ['Current role', 'Software Engineer · VegaIT'],
+      ['Studying', "Master's in Information Management, University of Novi Sad (in progress)"],
       ['Education', 'B.Sc. Electrical & Computer Engineering, University of Novi Sad'],
       ['Erasmus', 'Budapest University of Technology'],
       ['Languages', 'Serbian (native) · English (B2)'],
@@ -294,7 +299,7 @@ export const act4 = {
         period: '2022 - Present',
         summary: 'Client and independent work, alongside university and now alongside full-time work.',
         bullets: [
-          'Shipped the HNZ community platform solo: Stripe donations, audio streaming, FastAPI + PostgreSQL',
+          'Shipped the HNZ community platform solo and run it in production: FastAPI on Cloud Run, Cloudflare Pages and R2, Neon Postgres, all in Terraform',
           'Built a client website in Django (Digital Archive)',
           'The track Sithea and Solenne grew out of',
         ],
