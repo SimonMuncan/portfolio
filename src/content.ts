@@ -101,21 +101,19 @@ export const act2 = {
       links: [{ label: 'Ask about this project', ask: 'What did he build on the clinical trial platform at VegaIT?' }],
     },
     {
-      title: 'HNZ Church Community Platform',
+      title: 'Community Content Platform',
       company: 'Freelance',
       period: '2024 - Present',
       summary:
-        'Production platform for a Serbian Christian community, live at hnzsrbija.org. Designed, built and deployed solo, on a scale-to-zero bill.',
+        'Production platform for a community organisation, live and in daily use. Designed, built and deployed solo, on a scale-to-zero bill.',
       built: [
         'Async FastAPI on Neon Postgres: sermons, hymns with audio, history stories, a Bible reader, an interactive map and a full admin panel',
         'Scale-to-zero Cloud Run API in Terraform, behind a Cloudflare Pages proxy that keeps the session cookie first-party',
         'Security hardening: database-validated sessions, rate limiting, CSP and HSTS, gitleaks in CI',
       ],
       stack: ['FastAPI', 'PostgreSQL', 'React', 'TypeScript', 'GCP Cloud Run', 'Terraform', 'Cloudflare'],
-      links: [
-        { label: 'hnzsrbija.org', href: 'https://hnzsrbija.org' },
-        { label: 'Ask about the infrastructure', ask: 'How is the HNZ platform deployed?' },
-      ],
+      note: 'Client work under NDA. Architecture and my own work only.',
+      links: [{ label: 'Ask about the infrastructure', ask: 'How is the community platform deployed?' }],
     },
     {
       title: 'Portfolio AI Assistant',
@@ -299,7 +297,7 @@ export const act4 = {
         period: '2022 - Present',
         summary: 'Client and independent work, alongside university and now alongside full-time work.',
         bullets: [
-          'Shipped the HNZ community platform solo and run it in production: FastAPI on Cloud Run, Cloudflare Pages and R2, Neon Postgres, all in Terraform',
+          'Shipped a community platform solo and run it in production: FastAPI on Cloud Run, Cloudflare Pages and R2, Neon Postgres, all in Terraform',
           'Built a client website in Django (Digital Archive)',
           'The track Sithea and Solenne grew out of',
         ],
