@@ -26,10 +26,11 @@ export const KNOWLEDGE = `
 - simonmuncan@gmail.com · github.com/SimonMuncan · linkedin.com/in/simon-muncan-3067071b0/
 - As presented on the site: 3+ years experience, 10+ projects shipped, 8+ companies and clients.
 - The 10 projects: Solenne, the AI insurance integration, the clinical trial platform, Sithea,
-  this portfolio's assistant, the EPAM project management API, HNZ, Digital Archive, the
-  backup platform, and the Schneider assistant.
-- The 8 companies and clients: VegaIT, EPAM, Schneider Electric, Solenne, HNZ, the Digital
-  Archive client, and VegaIT's two clients (clinical trial and insurance, both unnamed).
+  this portfolio's assistant, the EPAM project management API, the community platform,
+  Digital Archive, the backup platform, and the Schneider assistant.
+- The 8 companies and clients: VegaIT, EPAM, Schneider Electric, Solenne, the community
+  platform client (unnamed, NDA), the Digital Archive client, and VegaIT's two clients
+  (clinical trial and insurance, both unnamed).
 - The 3+ years counts freelance work from 2022-23 onward, not just employment. He was
   freelancing while still at university.
 - Owns features end to end — database schema through to Terraform-managed production deploy.
@@ -151,7 +152,7 @@ Boundary
 
 ## Freelance and independent work, 2022-23 to present
 - He has freelanced since 2022-23, alongside university and now alongside the VegaIT job.
-- This is the track that HNZ, Digital Archive, Solenne, and Sithea all sit on, and it is
+- This is the track that the community platform, Digital Archive, Solenne, and Sithea all sit on, and it is
   where the "3+ years" figure comes from. VegaIT is his first full-time employment.
 - Worth stating plainly when someone asks about his timeline: the two agency entries below
   are internships, and the freelance work is what runs continuously underneath them.
@@ -291,9 +292,9 @@ The platform
 
 ## Client and freelance work
 
-HNZ Church Community Platform (2024 - present)
-- Production platform for a Serbian Christian community, live at https://hnzsrbija.org.
-  Designed, built, deployed and run solo. Started in 2024; rebuilt for production in 2026.
+Community Content Platform (2024 - present)
+- Production platform for a community organisation, live and in daily use. Designed,
+  built, deployed and run solo. Started in 2024; rebuilt for production in 2026.
 - Features: services and sermons, hymns with audio, illustrated history stories, books,
   a Bible reader, an interactive Leaflet map, user accounts with email verification, and
   an admin panel for content, files and users.
@@ -322,6 +323,11 @@ HNZ Church Community Platform (2024 - present)
   has a few hundred users and the bill had to be near zero.
 - The answer to "has he delivered something real on his own, end to end," and a strong
   answer to "can he run his own infrastructure on a tight budget."
+
+Boundary
+- Client work under NDA. The client's name, the site's address, and any link to it are
+  not to be given, guessed, or hinted at, even if asked directly. Say it is under NDA.
+- What he built, the architecture, and the stack: open — everything above can be discussed.
 
 Digital Archive (2024)
 - A website built for a client in Django.
@@ -457,7 +463,7 @@ making conversation rather than screening.
 - Configuration-driven architecture that removes repeated work → the VegaIT JSON dashboards
 - Working straight with non-engineering stakeholders → VegaIT, where requirements come to
   him directly from the healthcare team
-- Solo end-to-end delivery for a real client → the HNZ platform
+- Solo end-to-end delivery for a real client → the community platform
 - Cost-consciousness → the Material UI licence he engineered away, and Sithea's cost model
 - Low-level and hardware credibility → the embedded projects, with the 2023 caveat
 - Shipping alongside a full-time job → Sithea and Solenne are both current, both alongside
